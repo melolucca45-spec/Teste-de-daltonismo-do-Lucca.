@@ -27,7 +27,7 @@
 
     <div id="quiz-space">
         <div class="img-box">
-            <img id="display-img" src="">
+            <img id="display-img" src="" alt="Carregando imagem...">
         </div>
         
         <div id="input-group">
@@ -68,7 +68,11 @@
         document.getElementById('feedback').style.display = 'none';
         document.getElementById('input-group').style.display = 'block';
         document.getElementById('contador').innerText = "Imagem #" + (currentIdx + 1);
-        document.getElementById('display-img').src = database[currentIdx].img;
+        
+        const imgElement = document.getElementById('display-img');
+        // Adicionando um timestamp para evitar problemas de cache no navegador
+        imgElement.src = database[currentIdx].img + "?v=" + new Date().getTime();
+        
         document.getElementById('user-answer').value = '';
     }
 

@@ -27,10 +27,11 @@
 
     <script>
         let etapa = 0;
+        // SINCRONIZADO: Imagem correta com o número correto
         const dadosTeste = [
-            { img: "IMG_6395.jpeg", correto: 12, tipo: "Controle" },
-            { img: "IMG_6396.jpeg", correto: 8,  tipo: "Protanopia" },
-            { img: "IMG_6397.gif",  correto: 5,  tipo: "Deuteranopia" },
+            { img: "IMG_6395.jpeg", correto: 12, tipo: "Controle (Normal)" },
+            { img: "IMG_6396.jpeg", correto: 8,  tipo: "Protanopia (Dificuldade com Vermelho)" },
+            { img: "IMG_6397.gif",  correto: 5,  tipo: "Deuteranopia (Dificuldade com Verde)" },
             { img: "IMG_6398.jpeg", correto: 29, tipo: "Daltonismo Vermelho-Verde" },
             { img: "IMG_6399.png",  correto: 74, tipo: "Protanopia Grave" },
             { img: "IMG_6400.jpeg", correto: 7,  tipo: "Deuteranopia Grave" },
@@ -42,7 +43,10 @@
 
         function verificarResposta() {
             const campo = document.getElementById("respostaUsuario");
-            if (parseInt(campo.value) !== dadosTeste[etapa].correto) {
+            const respostaDigitada = parseInt(campo.value);
+            
+            // Verifica se está certo antes de passar para a próxima
+            if (respostaDigitada !== dadosTeste[etapa].correto) {
                 errosCometidos.push({
                     imagem: dadosTeste[etapa].img,
                     numeroCerto: dadosTeste[etapa].correto,
@@ -50,7 +54,9 @@
                     deficiencia: dadosTeste[etapa].tipo
                 });
             }
+
             etapa++;
+
             if (etapa < dadosTeste.length) {
                 document.getElementById("imagem-teste").src = dadosTeste[etapa].img;
                 campo.value = "";
@@ -62,11 +68,14 @@
         function exibirResultado() {
             let res = "<h2>Resultado Final</h2>";
             if (errosCometidos.length === 0) {
-                res += "<p style='color:green; font-weight:bold;'>Visão Normal: Você acertou tudo!</p>";
+                res += "<p style='color:green; font-weight:bold;'>Parabéns! Você acertou tudo.</p>";
             } else {
-                res += "<p>O teste detectou os seguintes pontos:</p>";
+                res += "<p>O sistema detectou erros de percepção:</p>";
                 errosCometidos.forEach(item => {
-                    res += `<div class='erro-item'><b>Imagem ${item.imagem}:</b> Era ${item.numeroCerto} e você viu ${item.seuNumero}.<br>Reflete: ${item.deficiencia}</div>`;
+                    res += `<div class='erro-item'>
+                        <b>Imagem:</b> ${item.imagem}<br>
+                        <b>Correto:</b> ${item.numeroCerto} | <b>Você viu:</b> ${item.seuNumero}<br>
+                        <b>Tipo:</b> ${item.deficiencia}</div>`;
                 });
             }
             document.getElementById("conteudo").innerHTML = res + "<br><button onclick='location.reload()'>Reiniciar</button>";

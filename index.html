@@ -5,117 +5,94 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Teste de Daltonismo do Lucca</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; display: flex; flex-direction: column; align-items: center; background-color: #f0f2f5; margin: 0; padding: 20px; }
-        .container { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 380px; text-align: center; }
+        body { font-family: -apple-system, system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; background-color: #ffffff; margin: 0; padding: 20px; }
+        .container { width: 100%; max-width: 400px; text-align: center; }
         .siren { width: 80px; height: 35px; background: #444; border-radius: 20px 20px 0 0; margin: 0 auto 15px; border: 3px solid #222; transition: 0.3s; }
-        .img-box { width: 100%; aspect-ratio: 1/1; background: #eee; border-radius: 15px; overflow: hidden; margin-bottom: 20px; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; }
+        h1 { font-size: 1.8em; margin: 10px 0; color: #333; }
+        .img-box { width: 100%; aspect-ratio: 1/1; background: #f9f9f9; border-radius: 20px; border: 1px solid #eee; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         img { width: 100%; height: 100%; object-fit: contain; }
-        input { width: 100%; padding: 15px; font-size: 1.3em; text-align: center; border: 2px solid #ccc; border-radius: 10px; margin-bottom: 15px; box-sizing: border-box; }
-        .btn-blue { background-color: #007bff; color: white; border: none; padding: 18px; border-radius: 10px; width: 100%; font-size: 1.1em; font-weight: bold; cursor: pointer; }
-        .btn-next { background-color: #28a745; color: white; border: none; padding: 18px; border-radius: 10px; width: 100%; font-size: 1.1em; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .feedback { margin-top: 15px; padding: 10px; display: none; }
+        input { width: 100%; padding: 15px; font-size: 1.3em; text-align: center; border: 2px solid #ddd; border-radius: 12px; margin-bottom: 15px; box-sizing: border-box; }
+        .btn-blue { background-color: #007bff; color: white; border: none; padding: 18px; border-radius: 12px; width: 100%; font-size: 1.1em; font-weight: bold; }
+        .btn-green { background-color: #28a745; color: white; border: none; padding: 18px; border-radius: 12px; width: 100%; font-size: 1.1em; font-weight: bold; margin-top: 10px; }
+        .feedback { margin-top: 15px; padding: 15px; border-radius: 12px; display: none; }
         .hidden { display: none; }
     </style>
 </head>
 <body>
-
 <div class="container">
     <div class="siren" id="sirene"></div>
-    <h2 id="contador" style="margin: 0 0 15px 0;">Imagem #1</h2>
-
-    <div id="teste-area">
-        <div class="img-box">
-            <img id="imagem-corrente" src="">
+    <h1 id="titulo">Imagem #1</h1>
+    <div id="jogo">
+        <div class="img-box"><img id="foto" src=""></div>
+        <div id="acao">
+            <input type="number" id="campo-numero" inputmode="numeric" placeholder="Qual número?">
+            <button class="btn-blue" onclick="conferir()">VERIFICAR</button>
         </div>
-        
-        <div id="controles">
-            <input type="number" id="campo-resposta" inputmode="numeric" placeholder="Qual número?">
-            <button class="btn-blue" onclick="verificar()">VERIFICAR</button>
-        </div>
-
         <div id="resultado" class="feedback">
-            <strong id="status-texto" style="font-size: 1.2em;"></strong>
-            <p id="diag-texto" style="color: #d40000; font-weight: bold; margin: 10px 0;"></p>
-            <button class="btn-next" onclick="proxima()">PRÓXIMA ➡️</button>
+            <strong id="msg-topo"></strong><br>
+            <span id="msg-diag" style="color: #d33; font-weight: bold; display: block; margin-top: 5px;"></span>
+            <button class="btn-green" onclick="proxima()">PRÓXIMA ➡️</button>
         </div>
     </div>
-
-    <div id="tela-final" class="hidden">
+    <div id="final" class="hidden">
         <h2>Resultado Final</h2>
-        <div id="resumo-final" style="text-align: left; background: #f8f9fa; padding: 15px; border-radius: 10px;"></div>
-        <button class="btn-blue" style="margin-top: 20px;" onclick="location.reload()">REINICIAR</button>
+        <div id="resumo" style="text-align: left; background: #f1f1f1; padding: 15px; border-radius: 12px;"></div>
+        <button class="btn-blue" style="margin-top: 20px;" onclick="location.reload()">RECOMEÇAR</button>
     </div>
 </div>
-
 <script>
-    const clips = [
-        { url: 'image_93.png', res: 42, def: "DEUTERANOPIA (VERDE)" },
-        { url: 'image_94.png', res: 12, def: "VISÃO NORMAL" },
-        { url: 'image_96.png', res: 45, def: "PROTANOPIA (VERMELHO)" },
-        { url: 'image_99.png', res: 74, def: "DEFICIÊNCIA VERDE/AMARELO" },
-        { url: 'image_95.png', res: 96, def: "DALTONISMO PROTAN/DEUTAN" },
-        { url: 'image_100.png', res: 67, def: "PROTANOPIA SEVERA" },
-        { url: 'image_98.png', res: 2, def: "ACROMATOPSIA (TOTAL)" }
+    const lista = [
+        { p: 'image_93.png', r: 42, d: "DEUTERANOPIA (VERDE)" },
+        { p: 'image_94.png', r: 12, d: "VISÃO NORMAL" },
+        { p: 'image_96.png', r: 45, d: "PROTANOPIA (VERMELHO)" },
+        { p: 'image_99.png', r: 74, d: "DEFICIÊNCIA VERDE/AMARELO" },
+        { p: 'image_95.png', r: 96, d: "DALTONISMO PROTAN/DEUTAN" },
+        { p: 'image_100.png', r: 67, d: "PROTANOPIA SEVERA" },
+        { p: 'image_98.png', r: 2, d: "ACROMATOPSIA (TOTAL)" }
     ];
-
-    let index = 0, acertos = 0, erros = [];
-
+    let atual = 0, nota = 0, erros = [];
     function carregar() {
         document.getElementById('sirene').style.background = '#444';
         document.getElementById('sirene').style.boxShadow = 'none';
         document.getElementById('resultado').style.display = 'none';
-        document.getElementById('controles').style.display = 'block';
-        document.getElementById('contador').innerText = "Imagem #" + (index + 1);
-        
-        // Força a atualização da imagem
-        document.getElementById('imagem-corrente').src = clips[index].url + "?v=" + Date.now();
-        document.getElementById('campo-resposta').value = '';
+        document.getElementById('acao').style.display = 'block';
+        document.getElementById('titulo').innerText = "Imagem #" + (atual + 1);
+        // O "?v=" com timestamp obriga o navegador a carregar a imagem real
+        document.getElementById('foto').src = lista[atual].p + "?t=" + new Date().getTime();
+        document.getElementById('campo-numero').value = '';
     }
-
-    function verificar() {
-        const resp = document.getElementById('campo-resposta').value;
-        const certo = clips[index].res.toString();
+    function conferir() {
+        const chute = document.getElementById('campo-numero').value;
+        const certo = lista[atual].r.toString();
         const siren = document.getElementById('sirene');
-        
-        document.getElementById('controles').style.display = 'none';
+        document.getElementById('acao').style.display = 'none';
         document.getElementById('resultado').style.display = 'block';
-
-        if (resp === certo) {
-            acertos++;
+        if (chute === certo) {
+            nota++;
             siren.style.background = '#28a745';
             siren.style.boxShadow = '0 0 15px #28a745';
-            document.getElementById('status-texto').innerText = "✅ CORRETO!";
-            document.getElementById('status-texto').style.color = "green";
-            document.getElementById('diag-texto').innerText = "";
+            document.getElementById('msg-topo').innerText = "✅ CORRETO!";
+            document.getElementById('msg-topo').style.color = "green";
         } else {
-            erros.push({n: index + 1, d: clips[index].def});
-            siren.style.background = '#d40000';
-            siren.style.boxShadow = '0 0 15px #d40000';
-            document.getElementById('status-texto').innerText = "❌ INCORRETO!";
-            document.getElementById('status-texto').style.color = "red";
-            document.getElementById('diag-texto').innerText = "DIAGNÓSTICO: " + clips[index].def;
+            erros.push({n: atual + 1, info: lista[atual].d});
+            siren.style.background = '#d33';
+            siren.style.boxShadow = '0 0 15px #d33';
+            document.getElementById('msg-topo').innerText = "❌ INCORRETO!";
+            document.getElementById('msg-topo').style.color = "red";
+            document.getElementById('msg-diag').innerText = "DIAGNÓSTICO: " + lista[atual].d;
         }
     }
-
     function proxima() {
-        index++;
-        if (index < clips.length) carregar(); else finalizar();
+        atual++;
+        if (atual < lista.length) carregar(); else finalizar();
     }
-
     function finalizar() {
-        document.getElementById('teste-area').classList.add('hidden');
-        document.getElementById('contador').classList.add('hidden');
-        document.getElementById('tela-final').classList.remove('hidden');
-        let rel = "<b>Acertos: " + acertos + " / " + clips.length + "</b><br><br>";
-        if (erros.length > 0) {
-            rel += "<b>Diagnósticos:</b><br>";
-            erros.forEach(e => rel += "• Imagem " + e.n + ": " + e.d + "<br>");
-        } else {
-            rel += "<span style='color:green'>Visão perfeita!</span>";
-        }
-        document.getElementById('resumo-final').innerHTML = rel;
+        document.getElementById('jogo').classList.add('hidden');
+        document.getElementById('final').classList.remove('hidden');
+        let rel = "<b>Acertos: " + nota + " de " + lista.length + "</b><br>";
+        erros.forEach(e => rel += "• Imagem " + e.n + ": " + e.info + "<br>");
+        document.getElementById('resumo').innerHTML = rel;
     }
-
     carregar();
 </script>
 </body>

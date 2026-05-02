@@ -5,48 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teste de Daltonismo do Lucca</title>
     <style>
-        body { font-family: sans-serif; text-align: center; padding: 20px; background-color: #f4f4f4; }
-        .container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        img { width: 100%; max-width: 300px; height: auto; border-radius: 50%; margin-bottom: 20px; }
-        input { width: 80%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; }
-        button { padding: 10px 20px; background-color: black; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        body { font-family: sans-serif; text-align: center; padding: 20px; }
+        img { max-width: 300px; border-radius: 10px; margin-bottom: 20px; }
+        input { padding: 10px; width: 80px; font-size: 16px; }
+        button { padding: 10px 20px; background: black; color: white; border: none; border-radius: 5px; cursor: pointer; }
     </style>
 </head>
 <body>
+    <div id="teste-container">
+        <h1>Teste de Daltonismo do Lucca</h1>
+        <img id="imagem-teste" src="IMG_6395.jpeg">
+        <br>
+        <input type="number" id="respostaUsuario" placeholder="Número">
+        <br><br>
+        <button onclick="verificarResposta()">Verificar</button>
+    </div>
 
-<div class="container">
-    <h1>Teste de Daltonismo</h1>
-    <p id="progresso">Imagem 1 de 8</p>
-    <img id="imagemTeste" src="IMG_6395.jpeg" alt="Teste de Daltonismo">
-    <br>
-    <input type="number" id="respostaUsuario" placeholder="Que número você vê?">
-    <br>
-    <button onclick="verificarResposta()">Verificar</button>
-</div>
+    <script>
+        let etapa = 0;
+        const imagens = ["IMG_6395.jpeg", "IMG_6396.jpeg", "IMG_6397.jpeg", "IMG_6398.jpeg", "IMG_6399.png", "IMG_6400.jpeg", "IMG_6401.jpeg", "IMG_6402.jpeg"];
 
-<script>
-    let etapa = 0;
-    const imagens = [
-        "IMG_6395.jpeg", "IMG_6396.jpeg", "IMG_6397.gif", "IMG_6398.jpeg", 
-        "IMG_6399.png", "IMG_6400.jpeg", "IMG_6401.png", "IMG_6402.png"
-    ];
-    
-    function verificarResposta() {
-        etapa++;
-        if (etapa < imagens.length) {
-            document.getElementById("imagemTeste").src = imagens[etapa];
-            document.getElementById("progresso").innerText = "Imagem " + (etapa + 1) + " de " + imagens.length;
-            document.getElementById("respostaUsuario").value = "";
-        } else {
-        // Isso remove o que está na tela e mostra o resultado
-        document.body.innerHTML = `
-          <div style="text-align: center; margin-top: 50px; font-family: sans-serif;">
-            <h2>Teste Finalizado!</h2>
-            <p>O teste indica possíveis sinais de: <b>Daltonismo Vermelho/Verde</b>.</p>
-            <button onclick="location.reload()" style="padding: 10px; cursor: pointer;">Refazer Teste</button>
-          </div>
-        `;
-      }
-    }
-</script>
-     
+        function verificarResposta() {
+            etapa++;
+            if (etapa < imagens.length) {
+                document.getElementById("imagem-teste").src = imagens[etapa];
+                document.getElementById("respostaUsuario").value = "";
+            } else {
+                document.getElementById("teste-container").innerHTML = `
+                    <h2>Teste Finalizado!</h2>
+                    <p>O teste indica possíveis sinais de: <b>Daltonismo Vermelho/Verde</b>.</p>
+                    <button onclick="location.reload()">Refazer Teste</button>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

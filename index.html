@@ -2,196 +2,235 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cassino da Visão do Lucca</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- TAG DE VERIFICAÇÃO DO GOOGLE -->
+    <meta name="google-site-verification" content="COLE_O_SEU_CODIGO_AQUI" />
+    <title>Teste de Daltonismo do Lucca</title>
     <style>
         body { 
             font-family: 'Arial Black', sans-serif; 
-            background-color: #1a1a1a; 
+            background-color: #000; 
             color: #fff;
             text-align: center; 
-            padding: 20px; 
+            padding: 10px;
+            overflow-x: hidden;
+            touch-action: pan-y;
         }
-        .casino-machine { 
-            max-width: 500px; 
-            margin: 50px auto; 
-            background: #d4af37; 
-            padding: 20px; 
-            border: 10px solid #8b0000; 
-            border-radius: 20px; 
-            box-shadow: 0 0 50px #ff0000;
+        /* Estrutura da Máquina Caça-Níquel */
+        .slot-machine { 
+            max-width: 450px; 
+            margin: 20px auto; 
+            background: linear-gradient(145deg, #d4af37, #b8860b); 
+            padding: 15px; 
+            border: 8px solid #4a0000; 
+            border-radius: 30px; 
+            box-shadow: 0 0 40px #ff4500, inset 0 0 20px rgba(0,0,0,0.5);
             position: relative;
         }
-        .screen {
+        /* Visor Interno (Leitor) */
+        .visor-display {
+            background: #111;
+            color: #ff0000;
+            border: 4px solid #222;
+            padding: 15px;
+            border-radius: 15px;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 0 15px #000;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .screen-content {
             background: #fff;
             color: #333;
-            border: 5px solid #222;
-            padding: 20px;
+            width: 90%;
             border-radius: 10px;
-            min-height: 350px;
+            padding: 10px;
+            border: 3px solid #d4af37;
         }
-        h1 { color: #8b0000; text-shadow: 2px 2px #ff0000; margin-top: 0; }
+        h1 { color: #ff0000; text-shadow: 2px 2px #000; font-size: 1.5em; letter-spacing: 2px; }
+        .promo-text { color: #00ff00; font-weight: bold; text-shadow: 1px 1px #000; }
 
-        /* Estilo da Alavanca Realista */
-        .lever-container {
+        /* Alavanca Manual lateral */
+        .lever-system {
             position: absolute;
-            right: -55px;
-            top: 80px;
-            width: 40px;
-            height: 180px;
+            right: -45px;
+            top: 100px;
+            width: 30px;
+            height: 150px;
         }
-        .lever-base {
-            width: 15px;
-            height: 120px;
-            background: #444;
+        .lever-shaft {
+            width: 12px;
+            height: 100px;
+            background: #666;
             margin: auto;
-            border-radius: 10px;
+            border-radius: 5px;
             position: relative;
         }
         .lever-arm {
-            width: 10px;
-            height: 100px;
-            background: #888;
+            width: 8px;
+            height: 90px;
+            background: #999;
             position: absolute;
-            bottom: 20px;
+            bottom: 10px;
             left: 2px;
             transform-origin: bottom;
-            transition: transform 0.4s cubic-bezier(0.45, 0.05, 0.55, 0.95);
+            touch-action: none;
         }
-        .lever-knob {
+        .lever-ball {
             width: 45px;
             height: 45px;
-            background: radial-gradient(circle at 30% 30%, #ff0000, #8b0000);
+            background: radial-gradient(circle at 30% 30%, #ff1111, #4a0000);
             border-radius: 50%;
             position: absolute;
             top: -40px;
-            left: -17px;
-            cursor: pointer;
-            box-shadow: 0 5px 10px rgba(0,0,0,0.5);
+            left: -18px;
+            cursor: grab;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.6);
         }
-        .pulled { transform: rotateX(160deg); }
 
-        .imagem-teste { width: 100%; max-width: 250px; border: 5px solid #d4af37; border-radius: 10px; margin: 15px 0; }
-        .btn-casino { 
-            background: linear-gradient(#ff0000, #8b0000); 
-            color: gold; 
-            padding: 15px 30px; 
+        .img-container { width: 100%; max-width: 230px; border: 4px solid #d4af37; border-radius: 5px; margin: 10px 0; }
+        
+        /* Botão Verificar Estilo Cassino */
+        .btn-verify { 
+            background: linear-gradient(#00ff00, #008000); 
+            color: #fff; 
+            padding: 12px 25px; 
             border: 2px solid gold; 
-            border-radius: 5px; 
+            border-radius: 10px; 
             font-weight: bold;
             font-size: 1.1em;
             cursor: pointer;
+            text-shadow: 1px 1px #000;
+            box-shadow: 0 4px #004d00;
         }
+        .btn-verify:active { transform: translateY(2px); box-shadow: 0 2px #004d00; }
+        
         .hidden { display: none !important; }
-        .erro-msg { color: #fff; background-color: #8b0000; padding: 15px; border-radius: 8px; margin-top: 15px; }
-        .jackpot { color: #ffd700; background-color: #006400; padding: 30px; border: 5px double gold; border-radius: 10px; font-size: 1.5em; }
+        .result-bad { color: #fff; background: #8b0000; padding: 10px; border-radius: 5px; margin-top: 10px; font-size: 0.9em; }
+        .jackpot-box { color: #fff; background: #155724; border: 4px solid #ffd700; padding: 20px; border-radius: 10px; animation: blink 0.5s infinite; }
+        
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
 
-<div class="casino-machine">
-    <div class="screen">
-        <!-- TELA INICIAL -->
+<div class="slot-machine">
+    <div class="visor-display">
+        <!-- LEITOR INICIAL -->
         <div id="tela-inicial">
-            <h1>CASSINO DA VISÃO</h1>
-            <p>Aposte na sua visão!</p>
-            <p style="color: #666; font-size: 0.9em; margin-top: 40px;">➔ PUXE A ALAVANCA PARA COMEÇAR</p>
+            <h1>TESTE DE DALTONISMO</h1>
+            <p class="promo-text">APOSTE NA SUA VISÃO!</p>
+            <p style="color: #ffcc00; font-size: 0.7em; margin-top: 40px;">[PUXE A ALAVANCA PARA INICIAR]</p>
         </div>
 
-        <!-- TELA DO TESTE -->
-        <div id="tela-teste" class="hidden">
-            <h2 id="titulo-pergunta">SORTEIO 1</h2>
-            <img id="img-ishihara" src="" class="imagem-teste">
+        <!-- TELA DO TESTE (VISOR) -->
+        <div id="tela-teste" class="hidden screen-content">
+            <h3 id="label-pergunta" style="margin: 5px; font-size: 0.9em;">IMAGEM DE ISHIHARA 1</h3>
+            <img id="img-ishihara" src="" class="img-container">
             <br>
-            <input type="number" id="resposta-usuario" placeholder="?" style="width: 80px; padding: 10px; font-size: 20px; text-align: center; border: 2px solid #d4af37;">
+            <input type="number" id="user-input" placeholder="?" style="width: 60px; height: 40px; font-size: 20px; text-align: center; border: 2px solid #8b0000; border-radius: 5px;">
             <br><br>
-            <button class="btn-casino" onclick="validarPasso()">APOSTAR</button>
-            <div id="feedback-erro" class="erro-msg hidden"></div>
+            <button class="btn-verify" onclick="validarResposta()">VERIFICAR</button>
+            <div id="msg-erro" class="result-bad hidden"></div>
         </div>
 
         <!-- TELA FINAL -->
         <div id="tela-final" class="hidden">
-            <div class="jackpot">
-                🎰 JACKPOT! 🎰<br><br>
-                <span style="font-size: 0.7em;">Visão Normal: Você acertou tudo!</span>
+            <div class="jackpot-box">
+                <h2 style="margin:0;">🎰 JACKPOT 🎰</h2>
+                <p style="font-size: 0.8em;">VISÃO NORMAL: TODAS AS IMAGENS ACERTADAS!</p>
             </div>
-            <button class="btn-casino" style="margin-top:20px;" onclick="location.reload()">JOGAR DE NOVO</button>
+            <button class="btn-verify" style="margin-top:20px; background: #007bff;" onclick="location.reload()">JOGAR NOVAMENTE</button>
         </div>
     </div>
 
-    <!-- ALAVANCA MECÂNICA -->
-    <div class="lever-container" id="lever-container">
-        <div class="lever-base">
-            <div class="lever-arm" id="lever-arm">
-                <div class="lever-knob" onclick="ativarAlavanca()"></div>
+    <!-- ALAVANCA MANUAL -->
+    <div class="lever-system" id="lever-box">
+        <div class="lever-shaft">
+            <div class="lever-arm" id="arm-rotate">
+                <div class="lever-ball" id="lever-ball"></div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    // URLs baseadas nos arquivos exatos da sua imagem image_79.png
-    const dadosTeste = [
-        { id: 1, url: 'IMG_6395.jpeg', correto: 12, tipo: "Controle" },
-        { id: 2, url: 'IMG_6396.jpeg', correto: 8, tipo: "Protanopia/Deuteranopia" },
-        { id: 3, url: 'IMG_6397.gif', correto: 3, tipo: "Deuteranopia" },
-        { id: 4, url: 'IMG_6398.jpeg', correto: 42, tipo: "Daltonismo Vermelho-Verde" },
-        { id: 5, url: 'IMG_6399.png', correto: 74, tipo: "Protanopia Grave" },
-        { id: 6, url: 'IMG_6400.jpeg', correto: 96, tipo: "Deuteranopia Grave" },
-        { id: 7, url: 'IMG_6401.png', correto: 67, tipo: "Deficiência Geral" },
-        { id: 8, url: 'IMG_6402.png', correto: 2, tipo: "Protanopia/Deuteranopia" }
+    const dataset = [
+        { id: 1, url: 'IMG_6395.jpeg', ans: 12, diag: "Controle" },
+        { id: 2, url: 'IMG_6396.jpeg', ans: 8, diag: "Protanopia/Deuteranopia" },
+        { id: 3, url: 'IMG_6397.gif', ans: 3, diag: "Deuteranopia" },
+        { id: 4, url: 'IMG_6398.jpeg', ans: 42, diag: "Daltonismo Vermelho-Verde" },
+        { id: 5, url: 'IMG_6399.png', ans: 74, diag: "Protanopia Grave" },
+        { id: 6, url: 'IMG_6400.jpeg', ans: 96, diag: "Deuteranopia Grave" },
+        { id: 7, url: 'IMG_6401.png', ans: 67, diag: "Deficiência Geral" },
+        { id: 8, url: 'IMG_6402.png', ans: 2, diag: "Protanopia/Deuteranopia" }
     ];
 
-    let indiceAtual = 0;
-    let errouAlguma = false;
+    let currentStep = 0;
+    let hasErrors = false;
 
-    function ativarAlavanca() {
-        const arm = document.getElementById('lever-arm');
-        arm.classList.add('pulled');
-        
+    // Controle da Alavanca
+    const ball = document.getElementById('lever-ball');
+    const arm = document.getElementById('arm-rotate');
+    let touchStart = 0;
+
+    ball.addEventListener('touchstart', (e) => { touchStart = e.touches[0].clientY; });
+    ball.addEventListener('touchmove', (e) => {
+        let delta = e.touches[0].clientY - touchStart;
+        if (delta > 0 && delta < 130) {
+            arm.style.transform = `rotateX(${delta}deg)`;
+        }
+        if (delta >= 120) { startTest(); }
+    });
+    ball.addEventListener('touchend', () => { if (currentStep === 0) arm.style.transform = `rotateX(0deg)`; });
+
+    function startTest() {
+        arm.style.transform = `rotateX(160deg)`;
         setTimeout(() => {
-            arm.classList.remove('pulled');
             document.getElementById('tela-inicial').classList.add('hidden');
-            document.getElementById('lever-container').classList.add('hidden');
+            document.getElementById('lever-box').classList.add('hidden');
             document.getElementById('tela-teste').classList.remove('hidden');
-            carregarPergunta();
-        }, 600);
+            loadImg();
+        }, 350);
     }
 
-    function carregarPergunta() {
-        const pergunta = dadosTeste[indiceAtual];
-        document.getElementById('titulo-pergunta').innerText = `SORTEIO ${pergunta.id}`;
-        document.getElementById('img-ishihara').src = pergunta.url;
-        document.getElementById('resposta-usuario').value = '';
-        document.getElementById('feedback-erro').classList.add('hidden');
+    function loadImg() {
+        const item = dataset[currentStep];
+        document.getElementById('label-pergunta').innerText = `IMAGEM DE ISHIHARA ${item.id}`;
+        document.getElementById('img-ishihara').src = item.url;
+        document.getElementById('user-input').value = '';
+        document.getElementById('msg-erro').classList.add('hidden');
     }
 
-    function validarPasso() {
-        const resposta = parseInt(document.getElementById('resposta-usuario').value);
-        const correto = dadosTeste[indiceAtual].correto;
-        const feedback = document.getElementById('feedback-erro');
+    function validarResposta() {
+        const val = parseInt(document.getElementById('user-input').value);
+        const correct = dataset[currentStep].ans;
+        const feedback = document.getElementById('msg-erro');
 
-        if (isNaN(resposta)) return;
+        if (isNaN(val)) return;
 
-        if (resposta !== correto) {
-            errouAlguma = true;
-            feedback.innerHTML = `❌ PERDEU!<br>O número era ${correto}.<br>Indicação: ${dadosTeste[indiceAtual].tipo}`;
+        if (val !== correct) {
+            hasErrors = true;
+            feedback.innerHTML = `⚠️ ERROU!<br>Era ${correct}.<br>Indicação: ${dataset[currentStep].diag}`;
             feedback.classList.remove('hidden');
         } else {
-            avancar();
+            next();
         }
     }
 
-    function avancar() {
-        indiceAtual++;
-        if (indiceAtual < dadosTeste.length) {
-            carregarPergunta();
+    function next() {
+        currentStep++;
+        if (currentStep < dataset.length) {
+            loadImg();
         } else {
             document.getElementById('tela-teste').classList.add('hidden');
-            if (!errouAlguma) {
+            if (!hasErrors) {
                 document.getElementById('tela-final').classList.remove('hidden');
             } else {
-                alert("Fim de jogo! Você teve erros no percurso.");
+                alert("FIM DE JOGO! VOCÊ TEVE ERROS.");
                 location.reload();
             }
         }

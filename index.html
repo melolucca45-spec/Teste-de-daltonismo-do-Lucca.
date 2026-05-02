@@ -7,16 +7,18 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Roboto+Mono:wght@700&display=swap');
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { 
+        /* Trava o scroll da tela para não mexer enquanto puxa a alavanca */
+        html, body { 
+            overflow: hidden; 
+            height: 100%; 
+            position: fixed; 
+            width: 100%;
             background-color: #0a0a0a; 
             margin: 0; 
             display: flex; 
             justify-content: center; 
             align-items: center; 
-            height: 100vh; 
             font-family: 'Roboto Mono', monospace;
-            overflow: hidden;
         }
 
         .slot-machine {
@@ -30,67 +32,40 @@
         }
 
         .siren-light {
-            width: 60px;
-            height: 35px;
-            background: #333;
-            margin: -45px auto 10px;
-            border-radius: 20px 20px 0 0;
-            border: 4px solid #111;
-            transition: all 0.3s ease;
+            width: 60px; height: 35px; background: #333;
+            margin: -45px auto 10px; border-radius: 20px 20px 0 0;
+            border: 4px solid #111; transition: 0.3s;
         }
 
         .visor-display {
-            background: #ffffff;
-            border: 8px solid #333;
-            border-radius: 15px;
-            padding: 20px;
-            min-height: 440px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.2);
+            background: #ffffff; border: 8px solid #333; border-radius: 15px;
+            padding: 20px; min-height: 440px; display: flex;
+            flex-direction: column; justify-content: center; align-items: center;
         }
 
         h1 { font-family: 'Luckiest Guy', cursive; color: #d40000; font-size: 1.8em; margin: 0; text-align: center; }
         .subtitle { color: #333; font-size: 0.6em; font-weight: bold; margin-top: 5px; text-transform: uppercase; text-align: center; }
 
-        .lever-system { position: absolute; right: -50px; top: 150px; width: 45px; height: 180px; z-index: 100; }
+        /* Área da Alavanca com Z-index alto */
+        .lever-system { position: absolute; right: -55px; top: 150px; width: 60px; height: 200px; z-index: 999; }
         .lever-arm {
-            width: 16px; height: 120px;
-            background: linear-gradient(to right, #ddd, #888);
-            position: absolute; bottom: 20px; left: 6px;
-            transform-origin: bottom; touch-action: none;
+            width: 16px; height: 120px; background: linear-gradient(to right, #ddd, #888);
+            position: absolute; bottom: 20px; left: 15px; transform-origin: bottom;
             border: 2px solid #444; border-radius: 10px;
         }
         .lever-ball {
-            width: 60px; height: 60px;
-            background: radial-gradient(circle at 30% 30%, #ff0000, #440000);
-            border-radius: 50%; position: absolute; top: -55px; left: -22px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.7);
-            cursor: pointer;
+            width: 65px; height: 65px; background: radial-gradient(circle at 30% 30%, #ff0000, #440000);
+            border-radius: 50%; position: absolute; top: -55px; left: -25px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.7); cursor: pointer;
         }
 
         .img-test { width: 100%; max-width: 230px; border: 5px solid #d4af37; border-radius: 10px; margin: 10px 0; }
-
         .btn-verify {
-            background: #1a1a1a; color: gold; border: 2px solid gold;
-            padding: 12px; font-weight: bold; font-size: 1.1em;
-            border-radius: 10px; cursor: pointer; width: 100%;
-            font-family: 'Luckiest Guy', cursive; margin-top: 10px;
+            background: #1a1a1a; color: gold; border: 2px solid gold; padding: 12px;
+            border-radius: 10px; width: 100%; font-family: 'Luckiest Guy', cursive;
         }
-
-        input[type=number] {
-            width: 120px; height: 60px; font-size: 2em; text-align: center;
-            border: 4px solid #222; border-radius: 10px; margin: 10px;
-        }
-
-        .feedback-box { 
-            background: #fff0f0; border: 2px solid #d40000; 
-            padding: 15px; border-radius: 10px; margin-top: 10px;
-            color: #d40000; font-size: 0.8em; text-align: center;
-        }
-
+        input[type=number] { width: 120px; height: 60px; font-size: 2em; text-align: center; border: 4px solid #222; border-radius: 10px; }
+        .feedback-box { background: #fff0f0; border: 2px solid #d40000; padding: 15px; border-radius: 10px; color: #d40000; font-size: 0.8em; text-align: center; }
         .hidden { display: none !important; }
     </style>
 </head>
@@ -99,23 +74,20 @@
 <div class="slot-machine">
     <div class="siren-light" id="sirene"></div>
     <div class="visor-display">
-        
         <div id="tela-inicial">
             <h1>CASSINO<br>DA VISÃO</h1>
             <p class="subtitle">Teste de daltonismo com imagens Ishihara</p>
             <div style="font-size: 40px; margin: 15px;">🎰</div>
-            <p style="color: #666; font-size: 0.7em; text-align: center;">[ ARRASTE A BOLA VERMELHA ]</p>
+            <p style="color: #666; font-size: 0.7em;">[ PUXE A BOLA VERMELHA ]</p>
         </div>
 
         <div id="tela-teste" class="hidden">
             <p id="label-passo" style="margin:0; font-size: 0.7em; font-weight: bold; color:#000;">IMAGEM #1</p>
             <img id="img-target" src="" class="img-test">
-            
             <div id="area-input">
                 <input type="number" id="input-user" pattern="[0-9]*" inputmode="numeric">
                 <button class="btn-verify" onclick="validar()">VERIFICAR</button>
             </div>
-
             <div id="feedback-imediato" class="hidden feedback-box">
                 <p><b>ERRO DETECTADO!</b></p>
                 O correto era: <span id="info-correto"></span><br>
@@ -130,7 +102,6 @@
             <div id="relatorio-final" style="font-size: 0.7em; text-align: left; margin: 15px 0; color:#000;"></div>
             <button class="btn-verify" onclick="location.reload()">RECOMEÇAR</button>
         </div>
-
     </div>
 
     <div class="lever-system" id="alavanca-container">
@@ -141,6 +112,7 @@
 </div>
 
 <script>
+    // ORDEM E VALIDAÇÃO CORRIGIDAS
     const clips = [
         { url: 'IMG_6398.jpeg', res: 45, tipo: "Daltonismo Protanopia/Deuteranopia" },
         { url: 'IMG_6395.jpeg', res: 12, tipo: "Visão Normal (Controle)" },
@@ -158,12 +130,13 @@
     const bola = document.getElementById('bola-alavanca');
     let touchY = 0;
 
-    // EVENTOS DE TOQUE REFORÇADOS
-    bola.addEventListener('touchstart', (e) => { 
-        touchY = e.touches[0].clientY; 
-    }, {passive: true});
+    // BLOQUEIA O MOVIMENTO DA TELA E MOVE A ALAVANCA
+    bola.addEventListener('touchstart', function(e) {
+        touchY = e.touches[0].clientY;
+        e.preventDefault(); 
+    }, {passive: false});
 
-    bola.addEventListener('touchmove', (e) => {
+    bola.addEventListener('touchmove', function(e) {
         let diff = e.touches[0].clientY - touchY;
         if (diff > 0 && diff < 150) {
             braco.style.transform = `rotateX(${diff}deg)`;
@@ -171,7 +144,8 @@
         if (diff >= 130) {
             iniciarJogo();
         }
-    }, {passive: true});
+        e.preventDefault(); 
+    }, {passive: false});
 
     function iniciarJogo() {
         braco.style.transform = `rotateX(150deg)`;
@@ -235,11 +209,9 @@
             tit.style.color = "#d40000";
             rel.innerHTML = "<b>Resumo das dificuldades:</b><br>";
             listaErros.forEach(e => {
-                rel.innerHTML += `•Vixi, Lucca! Se a alavanca travou de vez, é sinal de que o código de movimento (JavaScript) não está carregando direito por causa do cache do seu iPhone aí em Joinville. 
+                rel.innerHTML += `• Imagem ${e.id}: era ${e.esperado} e você pôLucca, se a tela está subindo e descendo em vez de a alavanca mexer, é porque o navegador do iPhone está priorizando o gesto de "rolar a página" em cima do comando de "puxar a bola". Como você está em Joinville e o cache do Safari é persistente, vamos resolver isso de forma mecânica no código para travar o movimento da tela e liberar a alavanca.
 
-Quando a alavanca não mexe, é porque o navegador está tentando usar uma "receita" antiga para um "bolo" novo. Para resolver isso agora, mudei uma linha no código para forçar o toque a ser reconhecido.
-
-Aqui está o código completo com o ajuste na alavanca, a sirene corrigida e a ordem das imagens (45, 12, 42, 74, 96, 67, 2):
+Aqui está a versão com o comando `preventDefault()` reforçado e um ajuste no CSS para congelar o fundo enquanto você joga. 
 ```html
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -250,16 +222,18 @@ Aqui está o código completo com o ajuste na alavanca, a sirene corrigida e a o
     <style>
         @import url('[https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Roboto+Mono:wght@700&display=swap](https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Roboto+Mono:wght@700&display=swap)');
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { 
+        /* Trava o scroll da tela para não mexer enquanto puxa a alavanca */
+        html, body { 
+            overflow: hidden; 
+            height: 100%; 
+            position: fixed; 
+            width: 100%;
             background-color: #0a0a0a; 
             margin: 0; 
             display: flex; 
             justify-content: center; 
             align-items: center; 
-            height: 100vh; 
             font-family: 'Roboto Mono', monospace;
-            overflow: hidden;
         }
 
         .slot-machine {
@@ -273,67 +247,40 @@ Aqui está o código completo com o ajuste na alavanca, a sirene corrigida e a o
         }
 
         .siren-light {
-            width: 60px;
-            height: 35px;
-            background: #333;
-            margin: -45px auto 10px;
-            border-radius: 20px 20px 0 0;
-            border: 4px solid #111;
-            transition: all 0.3s ease;
+            width: 60px; height: 35px; background: #333;
+            margin: -45px auto 10px; border-radius: 20px 20px 0 0;
+            border: 4px solid #111; transition: 0.3s;
         }
 
         .visor-display {
-            background: #ffffff;
-            border: 8px solid #333;
-            border-radius: 15px;
-            padding: 20px;
-            min-height: 440px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.2);
+            background: #ffffff; border: 8px solid #333; border-radius: 15px;
+            padding: 20px; min-height: 440px; display: flex;
+            flex-direction: column; justify-content: center; align-items: center;
         }
 
         h1 { font-family: 'Luckiest Guy', cursive; color: #d40000; font-size: 1.8em; margin: 0; text-align: center; }
         .subtitle { color: #333; font-size: 0.6em; font-weight: bold; margin-top: 5px; text-transform: uppercase; text-align: center; }
 
-        .lever-system { position: absolute; right: -50px; top: 150px; width: 45px; height: 180px; z-index: 100; }
+        /* Área da Alavanca com Z-index alto */
+        .lever-system { position: absolute; right: -55px; top: 150px; width: 60px; height: 200px; z-index: 999; }
         .lever-arm {
-            width: 16px; height: 120px;
-            background: linear-gradient(to right, #ddd, #888);
-            position: absolute; bottom: 20px; left: 6px;
-            transform-origin: bottom; touch-action: none;
+            width: 16px; height: 120px; background: linear-gradient(to right, #ddd, #888);
+            position: absolute; bottom: 20px; left: 15px; transform-origin: bottom;
             border: 2px solid #444; border-radius: 10px;
         }
         .lever-ball {
-            width: 60px; height: 60px;
-            background: radial-gradient(circle at 30% 30%, #ff0000, #440000);
-            border-radius: 50%; position: absolute; top: -55px; left: -22px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.7);
-            cursor: pointer;
+            width: 65px; height: 65px; background: radial-gradient(circle at 30% 30%, #ff0000, #440000);
+            border-radius: 50%; position: absolute; top: -55px; left: -25px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.7); cursor: pointer;
         }
 
         .img-test { width: 100%; max-width: 230px; border: 5px solid #d4af37; border-radius: 10px; margin: 10px 0; }
-
         .btn-verify {
-            background: #1a1a1a; color: gold; border: 2px solid gold;
-            padding: 12px; font-weight: bold; font-size: 1.1em;
-            border-radius: 10px; cursor: pointer; width: 100%;
-            font-family: 'Luckiest Guy', cursive; margin-top: 10px;
+            background: #1a1a1a; color: gold; border: 2px solid gold; padding: 12px;
+            border-radius: 10px; width: 100%; font-family: 'Luckiest Guy', cursive;
         }
-
-        input[type=number] {
-            width: 120px; height: 60px; font-size: 2em; text-align: center;
-            border: 4px solid #222; border-radius: 10px; margin: 10px;
-        }
-
-        .feedback-box { 
-            background: #fff0f0; border: 2px solid #d40000; 
-            padding: 15px; border-radius: 10px; margin-top: 10px;
-            color: #d40000; font-size: 0.8em; text-align: center;
-        }
-
+        input[type=number] { width: 120px; height: 60px; font-size: 2em; text-align: center; border: 4px solid #222; border-radius: 10px; }
+        .feedback-box { background: #fff0f0; border: 2px solid #d40000; padding: 15px; border-radius: 10px; color: #d40000; font-size: 0.8em; text-align: center; }
         .hidden { display: none !important; }
     </style>
 </head>
@@ -342,23 +289,20 @@ Aqui está o código completo com o ajuste na alavanca, a sirene corrigida e a o
 <div class="slot-machine">
     <div class="siren-light" id="sirene"></div>
     <div class="visor-display">
-        
         <div id="tela-inicial">
             <h1>CASSINO<br>DA VISÃO</h1>
             <p class="subtitle">Teste de daltonismo com imagens Ishihara</p>
             <div style="font-size: 40px; margin: 15px;">🎰</div>
-            <p style="color: #666; font-size: 0.7em; text-align: center;">[ ARRASTE A BOLA VERMELHA ]</p>
+            <p style="color: #666; font-size: 0.7em;">[ PUXE A BOLA VERMELHA ]</p>
         </div>
 
         <div id="tela-teste" class="hidden">
             <p id="label-passo" style="margin:0; font-size: 0.7em; font-weight: bold; color:#000;">IMAGEM #1</p>
             <img id="img-target" src="" class="img-test">
-            
             <div id="area-input">
                 <input type="number" id="input-user" pattern="[0-9]*" inputmode="numeric">
                 <button class="btn-verify" onclick="validar()">VERIFICAR</button>
             </div>
-
             <div id="feedback-imediato" class="hidden feedback-box">
                 <p><b>ERRO DETECTADO!</b></p>
                 O correto era: <span id="info-correto"></span><br>
@@ -373,7 +317,6 @@ Aqui está o código completo com o ajuste na alavanca, a sirene corrigida e a o
             <div id="relatorio-final" style="font-size: 0.7em; text-align: left; margin: 15px 0; color:#000;"></div>
             <button class="btn-verify" onclick="location.reload()">RECOMEÇAR</button>
         </div>
-
     </div>
 
     <div class="lever-system" id="alavanca-container">
@@ -384,6 +327,7 @@ Aqui está o código completo com o ajuste na alavanca, a sirene corrigida e a o
 </div>
 
 <script>
+    // ORDEM E VALIDAÇÃO CORRIGIDAS
     const clips = [
         { url: 'IMG_6398.jpeg', res: 45, tipo: "Daltonismo Protanopia/Deuteranopia" },
         { url: 'IMG_6395.jpeg', res: 12, tipo: "Visão Normal (Controle)" },
@@ -401,12 +345,13 @@ Aqui está o código completo com o ajuste na alavanca, a sirene corrigida e a o
     const bola = document.getElementById('bola-alavanca');
     let touchY = 0;
 
-    // EVENTOS DE TOQUE REFORÇADOS
-    bola.addEventListener('touchstart', (e) => { 
-        touchY = e.touches[0].clientY; 
-    }, {passive: true});
+    // BLOQUEIA O MOVIMENTO DA TELA E MOVE A ALAVANCA
+    bola.addEventListener('touchstart', function(e) {
+        touchY = e.touches[0].clientY;
+        e.preventDefault(); 
+    }, {passive: false});
 
-    bola.addEventListener('touchmove', (e) => {
+    bola.addEventListener('touchmove', function(e) {
         let diff = e.touches[0].clientY - touchY;
         if (diff > 0 && diff < 150) {
             braco.style.transform = `rotateX(${diff}deg)`;
@@ -414,7 +359,8 @@ Aqui está o código completo com o ajuste na alavanca, a sirene corrigida e a o
         if (diff >= 130) {
             iniciarJogo();
         }
-    }, {passive: true});
+        e.preventDefault(); 
+    }, {passive: false});
 
     function iniciarJogo() {
         braco.style.transform = `rotateX(150deg)`;
@@ -486,5 +432,3 @@ Aqui está o código completo com o ajuste na alavanca, a sirene corrigida e a o
 </script>
 </body>
 </html>
-
-    

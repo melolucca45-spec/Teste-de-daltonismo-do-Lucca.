@@ -38,8 +38,9 @@
             document.getElementById("progresso").innerText = "Imagem " + (etapa + 1) + " de " + imagens.length;
             document.getElementById("respostaUsuario").value = "";
         } else {
-            alert("Teste finalizado! Obrigado por participar.");
-            location.reload();
+                    const resultadoDiv = document.getElementById("teste-container");
+        resultadoDiv.innerHTML = "<h2>Teste Finalizado!</h2><p>O teste indica possíveis sinais de: <b>Daltonismo Vermelho/Verde</b>.</p><button onclick='location.reload()'>Refazer Teste</button>";
+
         }
     }
 </script>

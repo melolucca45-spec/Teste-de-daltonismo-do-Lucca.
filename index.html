@@ -38,12 +38,15 @@
             document.getElementById("progresso").innerText = "Imagem " + (etapa + 1) + " de " + imagens.length;
             document.getElementById("respostaUsuario").value = "";
         } else {
-                    const resultadoDiv = document.getElementById("teste-container");
-        resultadoDiv.innerHTML = "<h2>Teste Finalizado!</h2><p>O teste indica possíveis sinais de: <b>Daltonismo Vermelho/Verde</b>.</p><button onclick='location.reload()'>Refazer Teste</button>";
-
-        }
+        // Isso remove o que está na tela e mostra o resultado
+        document.body.innerHTML = `
+          <div style="text-align: center; margin-top: 50px; font-family: sans-serif;">
+            <h2>Teste Finalizado!</h2>
+            <p>O teste indica possíveis sinais de: <b>Daltonismo Vermelho/Verde</b>.</p>
+            <button onclick="location.reload()" style="padding: 10px; cursor: pointer;">Refazer Teste</button>
+          </div>
+        `;
+      }
     }
 </script>
-
-</body>
-</html>
+     

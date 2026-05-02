@@ -9,62 +9,83 @@
         html, body { position: fixed; overflow: hidden; width: 100%; height: 100%; margin: 0; background-color: #1a1a1a; touch-action: none; }
         body { display: flex; justify-content: center; align-items: center; font-family: 'Roboto Mono', monospace; }
         .slot-machine { width: 310px; background: linear-gradient(to bottom, #cf9e2e, #f9f0b1, #8c6a1b); border: 8px solid #222; border-radius: 15px 15px 40px 40px; position: relative; padding: 10px; box-shadow: 0 20px 40px rgba(0,0,0,0.8); }
-        .siren { width: 50px; height: 25px; background: #444; position: absolute; top: -33px; left: 50%; transform: translateX(-50%); border-radius: 10px 10px 0 0; border: 3px solid #111; transition: 0.3s; }
-        .visor { background: white; border: 6px solid #333; border-radius: 10px; min-height: 380px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 15px; position: relative; }
-        h1 { font-family: 'Luckiest Guy', cursive; color: #d40000; font-size: 1.5em; margin: 0; text-align: center; }
-        .img-test { width: 100%; max-width: 190px; border: 4px solid #d4af37; border-radius: 8px; margin: 10px 0; }
+        .siren { width: 60px; height: 30px; background: #444; position: absolute; top: -35px; left: 50%; transform: translateX(-50%); border-radius: 20px 20px 0 0; border: 3px solid #111; box-shadow: inset 0 5px 10px rgba(255,255,255,0.2); }
+        .visor { background: white; border: 6px solid #333; border-radius: 10px; min-height: 400px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 15px; position: relative; }
+        h1 { font-family: 'Luckiest Guy', cursive; color: #d40000; font-size: 1.4em; margin: 0; text-align: center; line-height: 1; }
+        .img-test { width: 100%; max-height: 200px; object-fit: contain; border: 4px solid #d4af37; border-radius: 8px; margin: 10px 0; }
         .btn { background: #1a1a1a; color: gold; border: 2px solid gold; padding: 12px; border-radius: 8px; width: 100%; font-family: 'Luckiest Guy'; cursor: pointer; }
-        input { width: 90px; height: 50px; font-size: 1.6em; text-align: center; border: 3px solid #222; border-radius: 8px; margin-bottom: 10px; }
-        .feedback { background: #fff0f0; border: 2px solid #d40000; padding: 10px; border-radius: 8px; color: #d40000; font-size: 0.7em; text-align: center; margin-top: 5px; }
+        input { width: 100px; height: 50px; font-size: 1.8em; text-align: center; border: 3px solid #222; border-radius: 8px; margin-bottom: 10px; }
+        .feedback-box { text-align: center; margin-top: 5px; }
         .hidden { display: none !important; }
-        .lever-system { position: absolute; right: -50px; top: 100px; width: 60px; height: 200px; z-index: 999; }
+        /* Alavanca na Direita */
+        .lever-system { position: absolute; right: -50px; top: 120px; width: 60px; height: 200px; z-index: 999; }
         .lever-arm { width: 16px; height: 110px; background: #666; border: 2px solid #222; position: absolute; bottom: 40px; left: 20px; transform-origin: bottom; border-radius: 8px; }
         .lever-ball { width: 65px; height: 65px; background: radial-gradient(circle at 30% 30%, #ff0000, #660000); border-radius: 50%; position: absolute; top: -55px; left: -25px; box-shadow: 0 5px 15px rgba(0,0,0,0.6); }
     </style>
 </head>
 <body>
+
 <div class="slot-machine">
     <div class="siren" id="sirene"></div>
     <div class="visor">
+        <!-- TELA INICIAL -->
         <div id="tela-inicial">
             <h1>CASSINO<br>DA VISÃO</h1>
-            <p style="font-size: 0.5em; font-weight: bold; text-align: center;">TESTE DE DALTONISMO</p>
-            <div style="font-size: 40px;">🎰</div>
-            <p style="color: #d40000; font-weight: bold; font-size: 0.7em; margin-top: 20px;">⬇️ PUXE A ALAVANCA ⬇️</p>
+            <p style="font-size: 0.6em; font-weight: bold; text-align: center; color: #333;">SORTE OU VISÃO?</p>
+            <div style="font-size: 50px; text-align: center;">🎰</div>
+            <p style="color: #d40000; font-weight: bold; font-size: 0.7em; margin-top: 20px; text-align: center;">⬇️ PUXE A ALAVANCA ⬇️</p>
         </div>
+
+        <!-- TELA DE TESTE -->
         <div id="tela-teste" class="hidden">
             <p id="label" style="font-size: 0.8em; font-weight: bold; color: #333; margin: 0;">IMAGEM #1</p>
             <img id="img-target" src="" class="img-test">
-            <div id="input-area">
-                <input type="number" id="user-input" inputmode="numeric">
-                <button class="btn" onclick="validar()">VERIFICAR</button>
+            
+            <div id="game-controls">
+                <input type="number" id="user-input" inputmode="numeric" placeholder="?">
+                <button class="btn" id="btn-verificar" onclick="validar()">VERIFICAR</button>
             </div>
-            <div id="msg-feedback" class="hidden feedback">
-                <p><b id="status-fb"></b></p>
-                <span id="detalhe-fb"></span><br>
-                <button class="btn" style="margin-top:10px" onclick="proxima()">PRÓXIMA ➡️</button>
+
+            <div id="feedback-area" class="hidden feedback-box">
+                <p id="msg-texto" style="font-weight: bold; margin: 5px 0;"></p>
+                <button class="btn" onclick="proxima()">PRÓXIMA ➡️</button>
             </div>
         </div>
+
+        <!-- TELA FINAL -->
         <div id="tela-final" class="hidden">
-            <h1>LAUDO FINAL</h1>
-            <div id="relatorio" style="font-size: 0.65em; text-align: left; margin: 10px 0; max-height: 200px; overflow-y: auto;"></div>
-            <button class="btn" onclick="location.reload()">RECOMEÇAR</button>
+            <h1 style="font-size: 1.2em;">RESULTADO DO JOGADOR</h1>
+            <div id="relatorio" style="font-size: 0.65em; text-align: left; margin: 15px 0; border-top: 1px solid #ccc; padding-top: 10px;"></div>
+            <button class="btn" onclick="location.reload()">JOGAR DE NOVO</button>
         </div>
     </div>
-    <div class="lever-system"><div class="lever-arm" id="braco"><div class="lever-ball" id="bola"></div></div></div>
+
+    <div class="lever-system">
+        <div class="lever-arm" id="braco">
+            <div class="lever-ball" id="bola"></div>
+        </div>
+    </div>
 </div>
+
 <script>
     const clips = [
-        { url: 'IMG_6398.jpeg', res: 45, tipo: "Protanopia/Deuteranopia" },
-        { url: 'IMG_6395.jpeg', res: 12, tipo: "Visão Normal" },
-        { url: 'IMG_6398.jpeg', res: 42, tipo: "Protanopia/Deuteranopia" },
-        { url: 'IMG_6399.png', res: 74, tipo: "Verde/Vermelho" },
-        { url: 'IMG_6400.jpeg', res: 96, tipo: "Verde/Vermelho" },
-        { url: 'IMG_6401.png', res: 67, tipo: "Verde/Vermelho" },
-        { url: 'IMG_6402.png', res: 2, tipo: "Acromatopsia (Total)" }
+        { url: 'IMG_6398.jpeg', res: 45, def: "Dificuldade: Vermelho/Verde (Protanopia)" },
+        { url: 'IMG_6395.jpeg', res: 12, def: "Visão Normal (Imagem de Controle)" },
+        { url: 'IMG_6398.jpeg', res: 42, def: "Dificuldade: Vermelho/Verde (Deuteranopia)" },
+        { url: 'IMG_6399.png', res: 74, def: "Dificuldade: Verde/Amarelo" },
+        { url: 'IMG_6400.jpeg', res: 96, def: "Dificuldade: Tons de Rosa/Verde" },
+        { url: 'IMG_6401.png', res: 67, def: "Dificuldade: Protanopia severa" },
+        { url: 'IMG_6402.png', res: 2, def: "Dificuldade: Acromatopsia (Cores Totais)" }
     ];
-    let index = 0, erros = [], acertos = 0;
-    const braco = document.getElementById('braco'), bola = document.getElementById('bola'), sirene = document.getElementById('sirene');
+
+    let index = 0;
+    let erros = [];
+    let acertos = 0;
+    const braco = document.getElementById('braco');
+    const bola = document.getElementById('bola');
+    const sirene = document.getElementById('sirene');
+
+    // Lógica da Alavanca
     let startY = 0;
     bola.addEventListener('touchstart', (e) => { startY = e.touches[0].clientY; e.preventDefault(); }, {passive: false});
     bola.addEventListener('touchmove', (e) => {
@@ -73,50 +94,82 @@
         if (deltaY > 130) iniciar();
         e.preventDefault();
     }, {passive: false});
+
     function iniciar() {
         braco.style.transform = 'rotateX(160deg)';
-        setTimeout(() => { document.getElementById('tela-inicial').classList.add('hidden'); document.getElementById('tela-teste').classList.remove('hidden'); render(); }, 150);
+        setTimeout(() => {
+            document.getElementById('tela-inicial').classList.add('hidden');
+            document.getElementById('tela-teste').classList.remove('hidden');
+            render();
+        }, 200);
     }
+
     function render() {
         sirene.style.background = '#444';
-        document.getElementById('msg-feedback').classList.add('hidden');
-        document.getElementById('input-area').classList.remove('hidden');
+        sirene.style.boxShadow = 'none';
+        document.getElementById('feedback-area').classList.add('hidden');
+        document.getElementById('game-controls').classList.remove('hidden');
         document.getElementById('label').innerText = `IMAGEM #${index + 1}`;
         document.getElementById('img-target').src = clips[index].url;
         document.getElementById('user-input').value = '';
+        document.getElementById('user-input').focus();
     }
+
     function validar() {
         const val = parseInt(document.getElementById('user-input').value);
         if (isNaN(val)) return;
-        const status = document.getElementById('status-fb'), detalhe = document.getElementById('detalhe-fb'), fb = document.getElementById('msg-feedback'), area = document.getElementById('input-area');
-        area.classList.add('hidden'); fb.classList.remove('hidden');
+
+        const txt = document.getElementById('msg-texto');
+        document.getElementById('game-controls').classList.add('hidden');
+        document.getElementById('feedback-area').classList.remove('hidden');
+
         if (val === clips[index].res) {
-            sirene.style.background = '#00ff00'; acertos++;
-            status.innerText = "CORRETO!"; status.style.color = "green";
-            detalhe.innerText = "Você tem visão normal para esta imagem.";
+            // ACERTOU
+            acertos++;
+            sirene.style.background = '#00ff00';
+            sirene.style.boxShadow = '0 0 20px #00ff00';
+            txt.innerText = "✅ ACERTOU! LUZ VERDE!";
+            txt.style.color = "green";
         } else {
+            // ERROU
+            erros.push({id: index+1, digitou: val, certo: clips[index].res, causa: clips[index].def});
             sirene.style.background = '#ff0000';
-            erros.push({id: index+1, exp: clips[index].res, foi: val, tipo: clips[index].tipo});
-            status.innerText = "ERRO DETECTADO!"; status.style.color = "red";
-            detalhe.innerText = `Era ${clips[index].res}. Indicativo de: ${clips[index].tipo}`;
+            sirene.style.boxShadow = '0 0 20px #ff0000';
+            txt.innerText = "❌ ERROU! LUZ VERMELHA!";
+            txt.style.color = "red";
         }
     }
+
     function proxima() {
         index++;
-        if (index < clips.length) render();
-        else finalizar();
+        if (index < clips.length) {
+            render();
+        } else {
+            finalizar();
+        }
     }
+
     function finalizar() {
         document.getElementById('tela-teste').classList.add('hidden');
         document.getElementById('tela-final').classList.remove('hidden');
-        const r = document.getElementById('relatorio');
-        r.innerHTML = `<b>Acertos: ${acertos} de ${clips.length}</b><br><br>`;
-        if (erros.length === 0) r.innerHTML += "🎯 Visão Perfeita! Nenhuma deficiência encontrada.";
-        else {
-            r.innerHTML += "<b>DETALHAMENTO:</b><br>";
-            erros.forEach(e => { r.innerHTML += `• Imagem ${e.id}: Digitou ${e.foi} (Era ${e.exp}) - ${e.tipo}<br>`; });
+        const rel = document.getElementById('relatorio');
+        
+        let resumo = `<p><b>Total de Acertos: ${acertos} de ${clips.length}</b></p>`;
+        
+        if (erros.length === 0) {
+            resumo += `<p style="color:green"><b>Visão de Águia!</b> Você não apresentou sinais de daltonismo.</p>`;
+        } else {
+            resumo += `<p style="color:#d40000"><b>Relatório de Erros:</b></p>`;
+            erros.forEach(e => {
+                resumo += `<div style="margin-bottom:8px; border-bottom:1px dashed #ccc">
+                    • Imagem ${e.id}: Pôs ${e.digitou} (Era ${e.certo})<br>
+                    <i>${e.causa}</i>
+                </div>`;
+            });
         }
+        rel.innerHTML = resumo;
     }
 </script>
+
 </body>
 </html>

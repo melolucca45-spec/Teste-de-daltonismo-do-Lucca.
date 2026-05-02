@@ -5,115 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teste de Daltonismo do Lucca</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #ffffff; color: #333; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .container { max-width: 400px; width: 90%; text-align: center; border: 1px solid #eee; padding: 30px; border-radius: 15px; }
-        h1 { font-size: 1.4rem; color: #222; margin-bottom: 25px; }
-        img { width: 250px; height: 250px; border-radius: 50%; margin-bottom: 20px; border: 3px solid #f8f8f8; }
-        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background-color: #000; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: bold; }
-        .feedback { margin-top: 15px; padding: 10px; border-radius: 8px; font-weight: bold; display: none; }
-        .erro { background-color: #ffebee; color: #c62828; }
-        .acerto { background-color: #e8f5e9; color: #2e7d32; }
-        .hidden { display: none; }
-        .footer { font-size: 0.7rem; color: #999; margin-top: 30px; }
+        body { font-family: sans-serif; text-align: center; padding: 20px; background-color: #f4f4f4; }
+        .container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        img { width: 100%; max-width: 300px; height: auto; border-radius: 50%; margin-bottom: 20px; }
+        input { width: 80%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        button { padding: 10px 20px; background-color: black; color: white; border: none; border-radius: 5px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-<div class="container" id="tela-teste">
-    <h1>Teste de Daltonismo do Lucca</h1>
-    <p id="contador" style="font-size: 0.8rem; color: #666;">Imagem 1 de 9</p>
-    
-    <img id="imagem-atual" src="" alt="Teste">
-    
-    <input type="number" id="resposta" placeholder="Que número você vê?" autofocus>
-    <button id="btn-proximo" onclick="validar()">Verificar</button>
-
-    <div id="feedback-caixa" class="feedback"></div>
-</div>
-
-<div class="container hidden" id="tela-final">
-    <h1>Resultado Final</h1>
-    <p id="placar" style="font-size: 2rem; font-weight: bold;"></p>
-    <p id="diagnostico-final"></p>
-    <button onclick="location.reload()">Reiniciar</button>
+<div class="container">
+    <h1>Teste de Daltonismo</h1>
+    <p id="progresso">Imagem 1 de 8</p>
+    <img id="imagemTeste" src="IMG_6395.jpeg" alt="Teste de Daltonismo">
+    <br>
+    <input type="number" id="respostaUsuario" placeholder="Que número você vê?">
+    <br>
+    <button onclick="verificarResposta()">Verificar</button>
 </div>
 
 <script>
-    // Configuração das imagens e diagnósticos de erro
-    const dados = [
-        { url: "https://i.ibb.co/3ykS8Vz/daltonismo1.png", correta: "2", tipo: "Daltonismo Vermelho/Verde" },
-        { url: "https://i.ibb.co/60qYvjF/daltonismo2.png", correta: "29", tipo: "Deuteranopia (Verde)" },
-        { url: "https://i.ibb.co/jH8S5mF/daltonismo3.png", correta: "42", tipo: "Protanopia (Vermelho)" },
-        { url: "https://i.ibb.co/q9WJ4T2/daltonismo4.png", correta: "73", tipo: "Daltonismo Geral" },
-        { url: "https://i.ibb.co/8m0N33k/daltonismo5.png", correta: "74", tipo: "Daltonismo Vermelho/Verde" },
-        { url: "https://i.ibb.co/7XkP7Vz/daltonismo6.png", correta: "12", tipo: "Teste de Controle (Todos devem ver)" },
-        { url: "https://i.ibb.co/LpYx0pP/daltonismo7.png", correta: "5", tipo: "Deuteranopia / Protanopia" },
-        { url: "https://i.ibb.co/zH9v4Tf/daltonismo8.png", correta: "96", tipo: "Daltonismo Geral" },
-        { url: "https://i.ibb.co/v3m6H4z/daltonismo9.png", correta: "45", tipo: "Daltonismo Vermelho/Verde" }
+    let etapa = 0;
+    const imagens = [
+        "IMG_6395.jpeg", "IMG_6396.jpeg", "IMG_6397.gif", "IMG_6398.jpeg", 
+        "IMG_6399.png", "IMG_6400.jpeg", "IMG_6401.png", "IMG_6402.png"
     ];
-
-    let atual = 0;
-    let acertos = 0;
-
-    const imgTag = document.getElementById('imagem-atual');
-    const inputTag = document.getElementById('resposta');
-    const feedbackTag = document.getElementById('feedback-caixa');
-    const contadorTag = document.getElementById('contador');
-
-    function carregar() {
-        imgTag.src = dados[atual].url;
-        contadorTag.innerText = `Imagem ${atual + 1} de ${dados.length}`;
-        inputTag.value = "";
-        feedbackTag.style.display = "none";
-        document.getElementById('btn-proximo').innerText = "Verificar";
-    }
-
-    function validar() {
-        const btn = document.getElementById('btn-proximo');
-        
-        if (btn.innerText === "Próxima Imagem") {
-            atual++;
-            if (atual < dados.length) {
-                carregar();
-            } else {
-                finalizar();
-            }
-            return;
-        }
-
-        const userResp = inputTag.value.trim();
-        if (!userResp) return;
-
-        feedbackTag.style.display = "block";
-
-        if (userResp === dados[atual].correta) {
-            acertos++;
-            feedbackTag.className = "feedback acerto";
-            feedbackTag.innerText = "Correto!";
+    
+    function verificarResposta() {
+        etapa++;
+        if (etapa < imagens.length) {
+            document.getElementById("imagemTeste").src = imagens[etapa];
+            document.getElementById("progresso").innerText = "Imagem " + (etapa + 1) + " de " + imagens.length;
+            document.getElementById("respostaUsuario").value = "";
         } else {
-            feedbackTag.className = "feedback erro";
-            feedbackTag.innerText = `Incorreto. Isso pode indicar: ${dados[atual].tipo}`;
+            alert("Teste finalizado! Obrigado por participar.");
+            location.reload();
         }
-
-        btn.innerText = "Próxima Imagem";
     }
-
-    function finalizar() {
-        document.getElementById('tela-teste').classList.add('hidden');
-        document.getElementById('tela-final').classList.remove('hidden');
-        document.getElementById('placar').innerText = `${acertos} / ${dados.length}`;
-        
-        let texto = acertos === dados.length ? "Sua visão de cores é excelente!" : "Você teve dificuldade em algumas cores. Consulte um médico para um exame completo.";
-        document.getElementById('diagnostico-final').innerText = texto;
-    }
-
-    carregar();
 </script>
-
-<div class="footer" style="text-align: center; width: 100%; position: fixed; bottom: 10px;">
-    Criado por Lucca • Apenas informativo
-</div>
 
 </body>
 </html>

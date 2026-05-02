@@ -5,66 +5,163 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Teste de Daltonismo do Lucca</title>
     <style>
-        body { font-family: 'Arial Black', sans-serif; background-color: #000; color: #fff; text-align: center; padding: 10px; overflow-x: hidden; touch-action: pan-y; }
-        .slot-machine { max-width: 420px; margin: 20px auto; background: linear-gradient(145deg, #d4af37, #8b6d11); padding: 20px; border: 10px solid #4a0000; border-radius: 40px; box-shadow: 0 0 60px #ff4500; position: relative; }
-        .visor-display { background: #050505; color: #ff0000; border: 6px solid #222; padding: 20px; border-radius: 20px; min-height: 420px; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: inset 0 0 30px #000; }
-        .screen-content { background: #fff; color: #333; width: 95%; border-radius: 15px; padding: 15px; border: 4px solid #d4af37; }
-        h1 { color: #ff0000; text-shadow: 2px 2px #000; font-size: 1.4em; margin: 0; }
-        .promo { color: #00ff00; font-family: 'Courier New', monospace; font-weight: bold; margin: 10px 0; }
-        
-        /* Alavanca Lateral */
-        .lever-system { position: absolute; right: -50px; top: 120px; width: 40px; height: 160px; }
-        .lever-shaft { width: 15px; height: 110px; background: #555; margin: auto; border-radius: 8px; position: relative; border: 2px solid #333; }
-        .lever-arm { width: 10px; height: 100px; background: linear-gradient(#999, #666); position: absolute; bottom: 10px; left: 1px; transform-origin: bottom; touch-action: none; }
-        .lever-ball { width: 55px; height: 55px; background: radial-gradient(circle at 30% 30%, #ff0000, #660000); border-radius: 50%; position: absolute; top: -45px; left: -22px; cursor: grab; box-shadow: 0 6px 12px rgba(0,0,0,0.8); }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { 
+            background-color: #000; 
+            margin: 0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            font-family: 'Arial Black', sans-serif;
+            overflow: hidden; /* Trava a tela para a alavanca funcionar */
+        }
 
-        .img-box { width: 100%; max-width: 240px; border: 5px solid #d4af37; border-radius: 10px; margin: 15px 0; }
-        .btn-verify { background: linear-gradient(#28a745, #1e7e34); color: #fff; padding: 15px 35px; border: 3px solid gold; border-radius: 12px; font-weight: bold; font-size: 1.2em; cursor: pointer; text-shadow: 2px 2px #000; box-shadow: 0 5px #145523; }
-        .btn-verify:active { transform: translateY(3px); box-shadow: 0 2px #145523; }
+        /* Máquina inspirada na imagem real */
+        .slot-machine {
+            width: 340px;
+            background: linear-gradient(to bottom, #555, #222);
+            border: 6px solid #1a1a1a;
+            border-radius: 10px 10px 30px 30px;
+            position: relative;
+            padding: 15px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 20px rgba(255,255,255,0.1);
+        }
+
+        /* Topo da máquina (Luminária) */
+        .top-light {
+            width: 40px;
+            height: 20px;
+            background: #ffcc00;
+            margin: -25px auto 5px;
+            border-radius: 5px 5px 0 0;
+            box-shadow: 0 0 15px #ffcc00;
+        }
+
+        /* Visor Digital (Igual à tela de cima da foto) */
+        .visor-display {
+            background: #000;
+            border: 4px solid #d4af37;
+            border-radius: 5px;
+            padding: 20px;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            box-shadow: inset 0 0 20px #ff0000;
+        }
+
+        .screen-paper {
+            background: #fff;
+            width: 100%;
+            border-radius: 5px;
+            padding: 10px;
+            color: #222;
+        }
+
+        h1 { color: #ff0000; font-size: 1.2em; margin: 0; text-transform: uppercase; }
+        .promo { color: #00ff00; font-size: 0.8em; margin: 10px 0; }
+
+        /* Alavanca Lateral Mecânica */
+        .lever-system {
+            position: absolute;
+            right: -40px;
+            top: 150px;
+            width: 40px;
+            height: 150px;
+        }
+        .lever-base-joint {
+            width: 20px;
+            height: 40px;
+            background: #333;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            border-radius: 0 5px 5px 0;
+        }
+        .lever-arm {
+            width: 12px;
+            height: 100px;
+            background: linear-gradient(to right, #999, #666);
+            position: absolute;
+            bottom: 20px;
+            left: 4px;
+            transform-origin: bottom;
+            touch-action: none;
+        }
+        .lever-ball {
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle at 30% 30%, #ff0000, #660000);
+            border-radius: 50%;
+            position: absolute;
+            top: -45px;
+            left: -19px;
+            cursor: grab;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.5);
+        }
+
+        .img-test { width: 100%; max-width: 200px; border: 3px solid #d4af37; margin: 10px 0; }
+
+        /* Botão Verificar Estilo Cassino Antigo */
+        .btn-verify {
+            background: linear-gradient(#ffcc00, #b8860b);
+            border: 2px solid #000;
+            color: #000;
+            padding: 12px 20px;
+            font-weight: bold;
+            font-size: 1em;
+            border-radius: 5px;
+            box-shadow: 0 4px #664a00;
+            cursor: pointer;
+        }
+        .btn-verify:active { transform: translateY(2px); box-shadow: 0 2px #664a00; }
+
         .hidden { display: none !important; }
-        .jackpot { color: #fff; background: #004d00; border: 5px double #ffd700; padding: 25px; border-radius: 15px; }
+        .jackpot { background: #004d00; border: 4px gold double; padding: 20px; border-radius: 10px; color: #fff; }
     </style>
 </head>
 <body>
 
 <div class="slot-machine">
+    <div class="top-light"></div>
     <div class="visor-display">
-        <!-- LEITOR DO CAÇA-NÍQUEL -->
+        
         <div id="tela-inicial">
-            <h1>TESTE DE DALTONISMO</h1>
+            <h1>TESTE DE<br>DALTONISMO</h1>
             <p class="promo">APOSTE NA SUA VISÃO!</p>
-            <p style="color: #ffcc00; font-size: 0.8em; margin-top: 60px;">⬇️ DESLIZE A ALAVANCA PARA BAIXO</p>
+            <p style="color: #ffcc00; font-size: 0.7em; margin-top: 40px;">[ PUXE A ALAVANCA ]</p>
         </div>
 
-        <div id="tela-teste" class="hidden screen-content">
-            <h2 id="label-pergunta" style="margin: 0; font-size: 1em;">IMAGEM DE ISHIHARA 1</h2>
-            <img id="img-ishihara" src="" class="img-box">
+        <div id="tela-teste" class="hidden screen-paper">
+            <p id="ishihara-title" style="margin: 0; font-weight: bold; font-size: 0.8em;">IMAGEM DE ISHIHARA 1</p>
+            <img id="img-target" src="" class="img-test">
             <br>
-            <input type="number" id="user-ans" placeholder="?" style="width: 80px; height: 50px; font-size: 24px; text-align: center; border: 3px solid #8b0000; border-radius: 10px;">
+            <input type="number" id="input-val" placeholder="?" style="width: 60px; height: 40px; text-align: center; border: 2px solid #4a0000; font-size: 1.2em; border-radius: 5px;">
             <br><br>
-            <button class="btn-verify" onclick="checar()">VERIFICAR</button>
+            <button class="btn-verify" onclick="validar()">VERIFICAR</button>
         </div>
 
-        <div id="tela-final" class="hidden">
-            <div class="jackpot">
-                <h2 style="margin:0;">🎰 JACKPOT 🎰</h2>
-                <p style="font-size: 0.9em;">VISÃO NORMAL!</p>
-            </div>
-            <button class="btn-verify" style="margin-top:20px; background: #007bff; box-shadow: 0 5px #004085;" onclick="location.reload()">REPETIR</button>
+        <div id="tela-final" class="hidden jackpot">
+            <h2 style="margin:0;">🎰 JACKPOT 🎰</h2>
+            <p style="font-size: 0.7em;">VOCÊ ACERTOU TUDO!</p>
+            <button class="btn-verify" onclick="location.reload()">REPETIR</button>
         </div>
+
     </div>
 
-    <div class="lever-system" id="lever-box">
-        <div class="lever-shaft">
-            <div class="lever-arm" id="arm">
-                <div class="lever-ball" id="ball"></div>
-            </div>
+    <!-- Sistema da Alavanca -->
+    <div class="lever-system">
+        <div class="lever-base-joint"></div>
+        <div class="lever-arm" id="lever-arm">
+            <div class="lever-ball" id="lever-ball"></div>
         </div>
     </div>
 </div>
 
 <script>
-    // Respostas sincronizadas com suas imagens
     const clips = [
         { id: 1, url: 'IMG_6395.jpeg', res: 12 }, { id: 2, url: 'IMG_6396.jpeg', res: 8 },
         { id: 3, url: 'IMG_6397.gif', res: 3 }, { id: 4, url: 'IMG_6398.jpeg', res: 42 },
@@ -72,47 +169,64 @@
         { id: 7, url: 'IMG_6401.png', res: 67 }, { id: 8, url: 'IMG_6402.png', res: 2 }
     ];
 
-    let step = 0;
-    let errors = false;
-    const ball = document.getElementById('ball');
-    const arm = document.getElementById('arm');
-    let sY = 0;
+    let current = 0;
+    let fail = false;
+    const arm = document.getElementById('lever-arm');
+    const ball = document.getElementById('lever-ball');
+    let startY = 0;
 
-    // Movimento manual da alavanca
-    ball.addEventListener('touchstart', (e) => { sY = e.touches[0].clientY; });
+    // Lógica para destravar a alavanca e travar a rolagem da tela
+    ball.addEventListener('touchstart', (e) => {
+        startY = e.touches[0].clientY;
+        e.preventDefault(); // Impede a tela de subir/descer
+    }, { passive: false });
+
     ball.addEventListener('touchmove', (e) => {
-        let d = e.touches[0].clientY - sY;
-        if (d > 0 && d < 140) arm.style.transform = `rotateX(${d}deg)`;
-        if (d >= 130) go();
-    });
-    ball.addEventListener('touchend', () => { if (step === 0) arm.style.transform = `rotateX(0deg)`; });
+        let diff = e.touches[0].clientY - startY;
+        if (diff > 0 && diff < 130) {
+            arm.style.transform = `rotateX(${diff}deg)`;
+        }
+        if (diff >= 120) {
+            iniciar();
+        }
+        e.preventDefault();
+    }, { passive: false });
 
-    function go() {
-        arm.style.transform = `rotateX(160deg)`;
+    ball.addEventListener('touchend', () => {
+        if (current === 0) arm.style.transform = `rotateX(0deg)`;
+    });
+
+    function iniciar() {
+        arm.style.transform = `rotateX(150deg)`;
         setTimeout(() => {
             document.getElementById('tela-inicial').classList.add('hidden');
-            document.getElementById('lever-box').classList.add('hidden');
+            document.querySelector('.lever-system').classList.add('hidden');
             document.getElementById('tela-teste').classList.remove('hidden');
-            show();
+            render();
         }, 300);
     }
 
-    function show() {
-        document.getElementById('label-pergunta').innerText = `IMAGEM DE ISHIHARA ${clips[step].id}`;
-        document.getElementById('img-ishihara').src = clips[step].url;
-        document.getElementById('user-ans').value = '';
+    function render() {
+        document.getElementById('ishihara-title').innerText = `IMAGEM DE ISHIHARA ${clips[current].id}`;
+        document.getElementById('img-target').src = clips[current].url;
+        document.getElementById('input-val').value = '';
     }
 
-    function checar() {
-        const a = parseInt(document.getElementById('user-ans').value);
-        if (isNaN(a)) return;
-        if (a !== clips[step].res) errors = true;
-        step++;
-        if (step < clips.length) show();
+    function validar() {
+        const v = parseInt(document.getElementById('input-val').value);
+        if (isNaN(v)) return;
+        if (v !== clips[current].res) fail = true;
+        
+        current++;
+        if (current < clips.length) render();
         else {
             document.getElementById('tela-teste').classList.add('hidden');
-            if (!errors) document.getElementById('tela-final').classList.remove('hidden');
-            else { alert("FIM! VOCÊ TEVE ERROS NO TESTE."); location.reload(); }
+            if (!fail) {
+                document.getElementById('tela-final').classList.remove('hidden');
+            } else {
+                alert("FIM DE JOGO! VOCÊ ERROU.");
+                location.reload();
+            }
         }
     }
 </script>

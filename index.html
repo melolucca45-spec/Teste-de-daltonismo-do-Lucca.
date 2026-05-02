@@ -1,86 +1,125 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
- <meta name="google-site-verification" content="8JoycY49BZcjXZy4MA7aTfv558lDz9RHnY1GlscG3Rg" />   <meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- COLOQUE SUA TAG DO GOOGLE ABAIXO -->
+    <meta name="google-site-verification" content="COLE_O_SEU_CODIGO_AQUI" />
+    
     <title>Teste de Daltonismo do Lucca</title>
     <style>
-        body { font-family: sans-serif; text-align: center; padding: 20px; background-color: #f4f4f4; }
-        #teste-container { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: inline-block; max-width: 95%; width: 400px; }
-        img { max-width: 100%; height: auto; border-radius: 10px; margin-bottom: 20px; border: 2px solid #ddd; background-color: #eee; }
-        input { padding: 12px; width: 100px; font-size: 18px; border: 2px solid #ccc; border-radius: 8px; margin-bottom: 10px; }
-        button { padding: 12px 25px; background: #000; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; }
-        .resultado-item { margin-bottom: 15px; text-align: left; padding: 15px; border-radius: 10px; border-bottom: 1px solid #eee; }
-        .acerto { color: #2e7d32; background-color: #e8f5e9; border: 1px solid #c8e6c9; }
-        .erro { color: #d32f2f; background-color: #ffebee; border: 1px solid #ffcdd2; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f9; text-align: center; padding: 20px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { color: #333; }
+        .btn-comecar { background-color: #28a745; color: white; padding: 15px 40px; border: none; border-radius: 30px; font-size: 20px; cursor: pointer; transition: 0.3s; }
+        .btn-comecar:hover { background-color: #218838; transform: scale(1.05); }
+        .imagem-teste { width: 100%; max-width: 300px; border-radius: 10px; margin-bottom: 20px; }
+        .erro-msg { color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 15px; border-radius: 8px; margin-top: 10px; text-align: left; }
+        .sucesso-final { color: #155724; background-color: #d4edda; border: 1px solid #c3e6cb; padding: 20px; border-radius: 10px; font-weight: bold; font-size: 1.2em; }
+        .hidden { display: none; }
+        input { padding: 10px; width: 80%; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        .btn-proximo { background-color: #007bff; color: white; padding: 10px 25px; border: none; border-radius: 5px; cursor: pointer; }
     </style>
 </head>
 <body>
-    <div id="teste-container">
-        <h1>Teste de Daltonismo do Lucca</h1>
-        <div id="conteudo">
-            <h3 id="numero-etapa">Imagem 1 de 8</h3>
-            <img id="imagem-teste" src="IMG_6395.jpeg">
-            <br>
-            <input type="number" id="respostaUsuario" placeholder="Número">
-            <br>
-            <button onclick="verificarResposta()">Verificar</button>
-        </div>
+
+<div class="container">
+    <!-- TELA INICIAL -->
+    <div id="tela-inicial">
+        <h1>Teste de Visão - Nível Simples</h1>
+        <p>Utilizando imagens de Ishihara para detecção de daltonismo.</p>
+        <button class="btn-comecar" onclick="iniciarTeste()">COMEÇAR TESTE</button>
     </div>
 
-    <script>
-        let etapa = 0;
-        const dadosTeste = [
-            { img: "IMG_6395.jpeg", correto: 45, tipo: "Controle" },
-            { img: "IMG_6396.jpeg", correto: 12, tipo: "Protanopia" },
-            { img: "IMG_6397.gif",  correto: 3,  tipo: "Deuteranopia" },
-            { img: "IMG_6398.jpeg", correto: 42, tipo: "Daltonismo Vermelho-Verde" },
-            { img: "IMG_6399.png",  correto: 74, tipo: "Protanopia Grave" },
-            { img: "IMG_6400.jpeg", correto: 96, tipo: "Deuteranopia Grave" },
-            { img: "IMG_6401.png",  correto: 67, tipo: "Deficiência Geral" },
-            { img: "IMG_6402.png",  correto: 2,  tipo: "Protanopia/Deuteranopia" }
-        ];
+    <!-- TELA DO TESTE -->
+    <div id="tela-teste" class="hidden">
+        <h2 id="titulo-pergunta">Imagem 1</h2>
+        <img id="img-ishihara" src="" class="imagem-teste" alt="Imagem de Ishihara">
+        <br>
+        <input type="number" id="resposta-usuario" placeholder="Que número você vê?">
+        <br>
+        <button class="btn-proximo" onclick="validarPasso()">Confirmar</button>
+        
+        <!-- MENSAGEM DE ERRO IMEDIATA -->
+        <div id="feedback-erro" class="erro-msg hidden"></div>
+    </div>
 
-        let todasRespostas = [];
+    <!-- TELA FINAL DE SUCESSO -->
+    <div id="tela-final" class="hidden">
+        <div class="sucesso-final">
+            ✅ Visão Normal: Todas as imagens foram acertadas corretamente!
+        </div>
+        <button class="btn-proximo" style="margin-top:20px;" onclick="location.reload()">Refazer Teste</button>
+    </div>
+</div>
 
-        function verificarResposta() {
-            const campo = document.getElementById("respostaUsuario");
-            const valor = parseInt(campo.value);
-            
-            todasRespostas.push({
-                numeroImagem: etapa + 1,
-                correto: dadosTeste[etapa].correto,
-                digitado: campo.value || "Vazio",
-                foiAcerto: valor === dadosTeste[etapa].correto,
-                tipo: dadosTeste[etapa].tipo
-            });
+<script>
+    const dadosTeste = [
+        { id: 1, url: 'link_da_imagem_1.jpg', correto: 12, tipo: "Controle (Todos enxergam)" },
+        { id: 2, url: 'link_da_imagem_2.jpg', correto: 8, tipo: "Protanopia/Deuteranopia" },
+        { id: 3, url: 'link_da_imagem_3.jpg', correto: 3, tipo: "Deuteranopia" },
+        { id: 4, url: 'link_da_imagem_4.jpg', correto: 42, tipo: "Daltonismo Vermelho-Verde" },
+        { id: 5, url: 'link_da_imagem_5.jpg', correto: 74, tipo: "Protanopia Grave" },
+        { id: 6, url: 'link_da_imagem_6.jpg', correto: 96, tipo: "Deuteranopia Grave" },
+        { id: 7, url: 'link_da_imagem_7.jpg', correto: 67, tipo: "Deficiência Geral" }
+    ];
 
-            etapa++;
+    let indiceAtual = 0;
+    let errouAlguma = false;
 
-            if (etapa < dadosTeste.length) {
-                document.getElementById("imagem-teste").src = dadosTeste[etapa].img;
-                document.getElementById("numero-etapa").innerText = `Imagem ${etapa + 1} de 8`;
-                campo.value = "";
-            } else {
-                exibirResultado();
-            }
+    function iniciarTeste() {
+        document.getElementById('tela-inicial').classList.add('hidden');
+        document.getElementById('tela-teste').classList.remove('hidden');
+        carregarPergunta();
+    }
+
+    function carregarPergunta() {
+        const pergunta = dadosTeste[indiceAtual];
+        document.getElementById('titulo-pergunta').innerText = `Imagem ${pergunta.id}`;
+        document.getElementById('img-ishihara').src = pergunta.url;
+        document.getElementById('resposta-usuario').value = '';
+        document.getElementById('feedback-erro').classList.add('hidden');
+    }
+
+    function validarPasso() {
+        const resposta = parseInt(document.getElementById('resposta-usuario').value);
+        const correto = dadosTeste[indiceAtual].correto;
+        const feedback = document.getElementById('feedback-erro');
+
+        if (resposta !== correto) {
+            errouAlguma = true;
+            feedback.innerHTML = `
+                <b>[ERRO]</b><br>
+                Você digitou: ${resposta}<br>
+                O número real era: ${correto}<br>
+                Indicação: ${dadosTeste[indiceAtual].tipo}
+            `;
+            feedback.classList.remove('hidden');
+            // Não avança se errar, ou você pode decidir se ele continua mesmo errando.
+        } else {
+            avancar();
         }
+    }
 
-        function exibirResultado() {
-            let res = "<h2>Laudo Final</h2>";
-            todasRespostas.forEach(item => {
-                const classe = item.foiAcerto ? 'acerto' : 'erro';
-                const status = item.foiAcerto ? 'ACERTO' : 'ERRO';
-                res += `
-                    <div class="resultado-item ${classe}">
-                        <b>Imagem ${item.numeroImagem}</b> [${status}]<br>
-                        O correto era: ${item.correto}<br>
-                        Você digitou: ${item.digitado}<br>
-                        <i>Indicação: ${item.tipo}</i>
-                    </div>`;
-            });
-            document.getElementById("conteudo").innerHTML = res + "<button onclick='location.reload()'>Refazer Teste</button>";
+    function avancar() {
+        indiceAtual++;
+        if (indiceAtual < dadosTeste.length) {
+            carregarPergunta();
+        } else {
+            finalizar();
         }
-    </script>
+    }
+
+    function finalizar() {
+        document.getElementById('tela-teste').classList.add('hidden');
+        if (!errouAlguma) {
+            document.getElementById('tela-final').classList.remove('hidden');
+        } else {
+            alert("Teste finalizado. Verifique os erros apontados durante o percurso.");
+            location.reload();
+        }
+    }
+</script>
+
 </body>
 </html>

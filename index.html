@@ -6,17 +6,20 @@
     <title>Teste de Daltonismo do Lucca</title>
     <style>
         body { font-family: sans-serif; text-align: center; padding: 20px; background-color: #f4f4f4; }
-        #teste-container { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: inline-block; max-width: 95%; }
-        img { max-width: 100%; height: auto; border-radius: 10px; margin-bottom: 20px; border: 2px solid #ddd; background-color: #eee; min-height: 200px; }
+        #teste-container { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: inline-block; max-width: 95%; width: 400px; }
+        img { max-width: 100%; height: auto; border-radius: 10px; margin-bottom: 20px; border: 2px solid #ddd; background-color: #eee; }
         input { padding: 12px; width: 100px; font-size: 18px; border: 2px solid #ccc; border-radius: 8px; margin-bottom: 10px; }
         button { padding: 12px 25px; background: #000; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; }
-        .erro-item { color: #d93025; margin-bottom: 15px; text-align: left; padding: 10px; border-bottom: 1px solid #eee; }
+        .resultado-item { margin-bottom: 15px; text-align: left; padding: 15px; border-radius: 10px; border-bottom: 1px solid #eee; }
+        .acerto { color: #2e7d32; background-color: #e8f5e9; border: 1px solid #c8e6c9; }
+        .erro { color: #d32f2f; background-color: #ffebee; border: 1px solid #ffcdd2; }
     </style>
 </head>
 <body>
     <div id="teste-container">
         <h1>Teste de Daltonismo do Lucca</h1>
         <div id="conteudo">
+            <h3 id="numero-etapa">Imagem 1 de 8</h3>
             <img id="imagem-teste" src="IMG_6395.jpeg">
             <br>
             <input type="number" id="respostaUsuario" placeholder="Número">
@@ -27,38 +30,36 @@
 
     <script>
         let etapa = 0;
-        // SINCRONIZADO: Imagem correta com o número correto
         const dadosTeste = [
-            { img: "IMG_6395.jpeg", correto: 12, tipo: "Controle (Normal)" },
-            { img: "IMG_6396.jpeg", correto: 8,  tipo: "Protanopia (Dificuldade com Vermelho)" },
-            { img: "IMG_6397.gif",  correto: 5,  tipo: "Deuteranopia (Dificuldade com Verde)" },
-            { img: "IMG_6398.jpeg", correto: 29, tipo: "Daltonismo Vermelho-Verde" },
+            { img: "IMG_6395.jpeg", correto: 45, tipo: "Controle" },
+            { img: "IMG_6396.jpeg", correto: 12, tipo: "Protanopia" },
+            { img: "IMG_6397.gif",  correto: 3,  tipo: "Deuteranopia" },
+            { img: "IMG_6398.jpeg", correto: 42, tipo: "Daltonismo Vermelho-Verde" },
             { img: "IMG_6399.png",  correto: 74, tipo: "Protanopia Grave" },
-            { img: "IMG_6400.jpeg", correto: 7,  tipo: "Deuteranopia Grave" },
-            { img: "IMG_6401.png",  correto: 45, tipo: "Deficiência Geral" },
+            { img: "IMG_6400.jpeg", correto: 96, tipo: "Deuteranopia Grave" },
+            { img: "IMG_6401.png",  correto: 67, tipo: "Deficiência Geral" },
             { img: "IMG_6402.png",  correto: 2,  tipo: "Protanopia/Deuteranopia" }
         ];
 
-        let errosCometidos = [];
+        let todasRespostas = [];
 
         function verificarResposta() {
             const campo = document.getElementById("respostaUsuario");
-            const respostaDigitada = parseInt(campo.value);
+            const valor = parseInt(campo.value);
             
-            // Verifica se está certo antes de passar para a próxima
-            if (respostaDigitada !== dadosTeste[etapa].correto) {
-                errosCometidos.push({
-                    imagem: dadosTeste[etapa].img,
-                    numeroCerto: dadosTeste[etapa].correto,
-                    seuNumero: campo.value || "Vazio",
-                    deficiencia: dadosTeste[etapa].tipo
-                });
-            }
+            todasRespostas.push({
+                numeroImagem: etapa + 1,
+                correto: dadosTeste[etapa].correto,
+                digitado: campo.value || "Vazio",
+                foiAcerto: valor === dadosTeste[etapa].correto,
+                tipo: dadosTeste[etapa].tipo
+            });
 
             etapa++;
 
             if (etapa < dadosTeste.length) {
                 document.getElementById("imagem-teste").src = dadosTeste[etapa].img;
+                document.getElementById("numero-etapa").innerText = `Imagem ${etapa + 1} de 8`;
                 campo.value = "";
             } else {
                 exibirResultado();
@@ -66,19 +67,19 @@
         }
 
         function exibirResultado() {
-            let res = "<h2>Resultado Final</h2>";
-            if (errosCometidos.length === 0) {
-                res += "<p style='color:green; font-weight:bold;'>Parabéns! Você acertou tudo.</p>";
-            } else {
-                res += "<p>O sistema detectou erros de percepção:</p>";
-                errosCometidos.forEach(item => {
-                    res += `<div class='erro-item'>
-                        <b>Imagem:</b> ${item.imagem}<br>
-                        <b>Correto:</b> ${item.numeroCerto} | <b>Você viu:</b> ${item.seuNumero}<br>
-                        <b>Tipo:</b> ${item.deficiencia}</div>`;
-                });
-            }
-            document.getElementById("conteudo").innerHTML = res + "<br><button onclick='location.reload()'>Reiniciar</button>";
+            let res = "<h2>Laudo Final</h2>";
+            todasRespostas.forEach(item => {
+                const classe = item.foiAcerto ? 'acerto' : 'erro';
+                const status = item.foiAcerto ? 'ACERTO' : 'ERRO';
+                res += `
+                    <div class="resultado-item ${classe}">
+                        <b>Imagem ${item.numeroImagem}</b> [${status}]<br>
+                        O correto era: ${item.correto}<br>
+                        Você digitou: ${item.digitado}<br>
+                        <i>Indicação: ${item.tipo}</i>
+                    </div>`;
+            });
+            document.getElementById("conteudo").innerHTML = res + "<button onclick='location.reload()'>Refazer Teste</button>";
         }
     </script>
 </body>

@@ -6,11 +6,12 @@
     <title>Teste de Daltonismo do Lucca</title>
     <style>
         body { font-family: sans-serif; text-align: center; padding: 20px; background-color: #f4f4f4; }
-        #teste-container { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: inline-block; max-width: 90%; }
-        img { max-width: 100%; height: auto; border-radius: 10px; margin-bottom: 20px; border: 2px solid #ddd; }
+        #teste-container { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: inline-block; max-width: 95%; }
+        img { max-width: 100%; height: auto; border-radius: 10px; margin-bottom: 20px; border: 2px solid #ddd; background-color: #eee; min-height: 200px; }
         input { padding: 12px; width: 100px; font-size: 18px; border: 2px solid #ccc; border-radius: 8px; margin-bottom: 10px; }
         button { padding: 12px 25px; background: #000; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; }
-        .erro-item { color: #d93025; margin-bottom: 10px; text-align: left; }
+        .erro-item { color: #d93025; margin-bottom: 15px; text-align: left; padding: 10px; border-bottom: 1px solid #eee; }
+        .sucesso { color: #1e8e3e; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -18,7 +19,8 @@
     <div id="teste-container">
         <h1>Teste de Daltonismo do Lucca</h1>
         <div id="conteudo">
-            <img id="imagem-teste" src="IMG_6395.jpeg">
+            <!-- A primeira imagem começa aqui -->
+            <img id="imagem-teste" src="IMG_6395.jpg">
             <br>
             <input type="number" id="respostaUsuario" placeholder="Número">
             <br>
@@ -28,29 +30,30 @@
 
     <script>
         let etapa = 0;
-        // Dados das imagens: nome do arquivo, número correto e tipo de daltonismo se errar
+        // Ajustei para .jpg que é o mais provável de funcionar
         const dadosTeste = [
-            { img: "IMG_6395.jpeg", correto: 12, tipo: "Controle (Todos enxergam)" },
-            { img: "IMG_6396.jpeg", correto: 8,  tipo: "Protanopia (Vermelho/Verde)" },
-            { img: "IMG_6397.jpeg", correto: 5,  tipo: "Deuteranopia (Verde/Vermelho)" },
-            { img: "IMG_6398.jpeg", correto: 29, tipo: "Daltonismo Geral" },
-            { img: "IMG_6399.png",  correto: 74, tipo: "Protanopia" },
-            { img: "IMG_6400.jpeg", correto: 7,  tipo: "Deuteranopia" },
-            { img: "IMG_6401.jpeg", correto: 45, tipo: "Daltonismo Geral" },
-            { img: "IMG_6402.jpeg", correto: 2,  tipo: "Protanopia" }
+            { img: "IMG_6395.jpg", correto: 12, tipo: "Controle (Todos enxergam)" },
+            { img: "IMG_6396.jpg", correto: 8,  tipo: "Protanopia (Dificuldade com Vermelho)" },
+            { img: "IMG_6397.jpg", correto: 5,  tipo: "Deuteranopia (Dificuldade com Verde)" },
+            { img: "IMG_6398.jpg", correto: 29, tipo: "Daltonismo Vermelho-Verde" },
+            { img: "IMG_6399.png", correto: 74, tipo: "Protanopia Grave" },
+            { img: "IMG_6400.jpg", correto: 7,  tipo: "Deuteranopia Grave" },
+            { img: "IMG_6401.jpg", correto: 45, tipo: "Deficiência de cores geral" },
+            { img: "IMG_6402.jpg", correto: 2,  tipo: "Protanopia/Deuteranopia" }
         ];
 
         let errosCometidos = [];
 
         function verificarResposta() {
-            const resposta = document.getElementById("respostaUsuario").value;
+            const campoResposta = document.getElementById("respostaUsuario");
+            const respostaDigitada = campoResposta.value;
             
-            // Registra se o usuário errou
-            if (parseInt(resposta) !== dadosTeste[etapa].correto) {
+            // Se o usuário errar o número, guardamos os detalhes
+            if (parseInt(respostaDigitada) !== dadosTeste[etapa].correto) {
                 errosCometidos.push({
                     imagem: dadosTeste[etapa].img,
                     numeroCerto: dadosTeste[etapa].correto,
-                    seuNumero: resposta || "Vazio",
+                    seuNumero: respostaDigitada || "Vazio",
                     deficiencia: dadosTeste[etapa].tipo
                 });
             }
@@ -58,42 +61,41 @@
             etapa++;
 
             if (etapa < dadosTeste.length) {
-                // Passa para a próxima imagem
+                // Muda a imagem para a próxima
                 const proximaImg = document.getElementById("imagem-teste");
                 proximaImg.src = dadosTeste[etapa].img;
-                document.getElementById("respostaUsuario").value = "";
+                campoResposta.value = "";
                 
-                // Alerta se a imagem falhar ao carregar (ajuda a debugar)
+                // Se a imagem der erro (quadro azul), avisa qual é o arquivo
                 proximaImg.onerror = function() {
-                    alert("Erro ao carregar a imagem: " + dadosTeste[etapa].img + ". Verifique se o nome no GitHub está correto!");
+                    alert("Erro: Não achei o arquivo " + dadosTeste[etapa].img + ". Verifique se o nome no seu GitHub termina em .jpg ou .jpeg!");
                 };
             } else {
-                // Finaliza e mostra os erros detalhados
-                exibirResultado();
+                exibirResultadoFinal();
             }
         }
 
-        function exibirResultado() {
-            let htmlResultado = "<h2>Resultado do Teste</h2>";
+        function exibirResultadoFinal() {
+            let htmlFinal = "<h2>Resultado Detalhado</h2>";
             
             if (errosCometidos.length === 0) {
-                htmlResultado += "<p style='color: green;'><b>Parabéns! Você acertou tudo.</b></p>";
+                htmlFinal += "<p class='sucesso'>Excelente! Você acertou todas as imagens e não apresenta sinais de daltonismo nestes padrões.</p>";
             } else {
-                htmlResultado += "<p>Você teve dificuldades nas seguintes imagens:</p>";
+                htmlFinal += "<p>O teste foi concluído. Confira os erros detectados:</p>";
                 errosCometidos.forEach(item => {
-                    htmlResultado += `
+                    htmlFinal += `
                         <div class="erro-item">
                             <b>Imagem:</b> ${item.imagem}<br>
-                            <b>Número Correto:</b> ${item.numeroCerto} | <b>Você digitou:</b> ${item.seuNumero}<br>
-                            <b>Indicativo de:</b> ${item.deficiencia}<br>
-                            <hr>
+                            <b>Deveria ser:</b> ${item.numeroCerto} | <b>Você colocou:</b> ${item.seuNumero}<br>
+                            <b>Se este erro persistir, indica:</b> ${item.deficiencia}<br>
                         </div>
                     `;
                 });
+                htmlFinal += "<p style='font-size: 12px; color: #666;'>*Este é um teste educacional. Consulte um oftalmologista para um diagnóstico clínico.</p>";
             }
             
-            htmlResultado += "<button onclick='location.reload()'>Refazer Teste</button>";
-            document.getElementById("conteudo").innerHTML = htmlResultado;
+            htmlFinal += "<br><button onclick='location.reload()'>Reiniciar Teste</button>";
+            document.getElementById("conteudo").innerHTML = htmlFinal;
         }
     </script>
 </body>

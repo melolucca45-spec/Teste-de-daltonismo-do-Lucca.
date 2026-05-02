@@ -6,76 +6,166 @@
     <!-- COLOQUE SUA TAG DO GOOGLE ABAIXO -->
     <meta name="google-site-verification" content="COLE_O_SEU_CODIGO_AQUI" />
     
-    <title>Teste de Daltonismo do Lucca</title>
+    <title>Cassino da Visão do Lucca</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f9; text-align: center; padding: 20px; }
-        .container { max-width: 600px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h1 { color: #333; }
-        .btn-comecar { background-color: #28a745; color: white; padding: 15px 40px; border: none; border-radius: 30px; font-size: 20px; cursor: pointer; transition: 0.3s; }
-        .btn-comecar:hover { background-color: #218838; transform: scale(1.05); }
-        .imagem-teste { width: 100%; max-width: 300px; border-radius: 10px; margin-bottom: 20px; }
-        .erro-msg { color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 15px; border-radius: 8px; margin-top: 10px; text-align: left; }
-        .sucesso-final { color: #155724; background-color: #d4edda; border: 1px solid #c3e6cb; padding: 20px; border-radius: 10px; font-weight: bold; font-size: 1.2em; }
+        body { 
+            font-family: 'Arial Black', Gadget, sans-serif; 
+            background-color: #1a1a1a; 
+            color: #fff;
+            text-align: center; 
+            padding: 20px; 
+        }
+        .casino-machine { 
+            max-width: 500px; 
+            margin: auto; 
+            background: #d4af37; /* Cor de Ouro */
+            padding: 20px; 
+            border: 10px solid #8b0000; 
+            border-radius: 20px; 
+            box-shadow: 0 0 50px #ff0000;
+            position: relative;
+        }
+        .screen {
+            background: #fff;
+            color: #333;
+            border: 5px solid #222;
+            padding: 20px;
+            border-radius: 10px;
+            min-height: 300px;
+        }
+        h1 { color: #8b0000; text-shadow: 2px 2px #ff0000; }
+
+        /* Estilo da Alavanca */
+        .lever-container {
+            position: absolute;
+            right: -60px;
+            top: 100px;
+            width: 50px;
+            height: 150px;
+        }
+        .lever-base {
+            width: 20px;
+            height: 100px;
+            background: #555;
+            margin: auto;
+            border-radius: 10px;
+            position: relative;
+        }
+        .lever-arm {
+            width: 15px;
+            height: 80px;
+            background: #888;
+            position: absolute;
+            top: 0;
+            left: 2px;
+            transform-origin: bottom;
+            transition: transform 0.3s;
+        }
+        .lever-knob {
+            width: 40px;
+            height: 40px;
+            background: red;
+            border-radius: 50%;
+            position: absolute;
+            top: -30px;
+            left: -12px;
+            cursor: pointer;
+            box-shadow: 0 0 10px #000;
+        }
+        .lever-arm.pulled { transform: rotateX(180deg); }
+
+        .imagem-teste { width: 100%; max-width: 250px; border: 5px solid #d4af37; border-radius: 10px; margin-top: 10px; }
+        .btn-casino { 
+            background: linear-gradient(#ff0000, #8b0000); 
+            color: gold; 
+            padding: 10px 20px; 
+            border: 2px solid gold; 
+            border-radius: 5px; 
+            font-weight: bold;
+            cursor: pointer;
+        }
         .hidden { display: none; }
-        input { padding: 10px; width: 80%; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; }
-        .btn-proximo { background-color: #007bff; color: white; padding: 10px 25px; border: none; border-radius: 5px; cursor: pointer; }
+        .erro-msg { color: #fff; background-color: #8b0000; padding: 10px; border-radius: 5px; margin-top: 10px; }
+        .sucesso-final { color: #ffd700; background-color: #006400; padding: 20px; border: 3px solid gold; border-radius: 10px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <!-- TELA INICIAL -->
-    <div id="tela-inicial">
-        <h1>Teste de Visão - Nível Simples</h1>
-        <p>Utilizando imagens de Ishihara para detecção de daltonismo.</p>
-        <button class="btn-comecar" onclick="iniciarTeste()">COMEÇAR TESTE</button>
-    </div>
-
-    <!-- TELA DO TESTE -->
-    <div id="tela-teste" class="hidden">
-        <h2 id="titulo-pergunta">Imagem 1</h2>
-        <img id="img-ishihara" src="" class="imagem-teste" alt="Imagem de Ishihara">
-        <br>
-        <input type="number" id="resposta-usuario" placeholder="Que número você vê?">
-        <br>
-        <button class="btn-proximo" onclick="validarPasso()">Confirmar</button>
-        
-        <!-- MENSAGEM DE ERRO IMEDIATA -->
-        <div id="feedback-erro" class="erro-msg hidden"></div>
-    </div>
-
-    <!-- TELA FINAL DE SUCESSO -->
-    <div id="tela-final" class="hidden">
-        <div class="sucesso-final">
-            ✅ Visão Normal: Todas as imagens foram acertadas corretamente!
+<div class="casino-machine">
+    <div class="screen">
+        <!-- TELA INICIAL -->
+        <div id="tela-inicial">
+            <h1>CASSINO DA VISÃO</h1>
+            <p>Nível: Simples (Ishihara)</p>
+            <p style="font-size: 0.8em;">Puxe a alavanca para apostar na sua visão!</p>
         </div>
-        <button class="btn-proximo" style="margin-top:20px;" onclick="location.reload()">Refazer Teste</button>
+
+        <!-- TELA DO TESTE -->
+        <div id="tela-teste" class="hidden">
+            <h2 id="titulo-pergunta">Imagem 1</h2>
+            <img id="img-ishihara" src="" class="imagem-teste">
+            <br><br>
+            <input type="number" id="resposta-usuario" placeholder="Número?" style="width: 60px; padding: 5px;">
+            <br><br>
+            <button class="btn-casino" onclick="validarPasso()">APOSTAR</button>
+            <div id="feedback-erro" class="erro-msg hidden"></div>
+        </div>
+
+        <!-- TELA FINAL -->
+        <div id="tela-final" class="hidden">
+            <div class="sucesso-final">
+                🎰 JACKPOT! 🎰<br>
+                Visão Normal: Você acertou tudo!
+            </div>
+            <button class="btn-casino" style="margin-top:20px;" onclick="location.reload()">JOGAR DE NOVO</button>
+        </div>
+    </div>
+
+    <!-- ALAVANCA -->
+    <div class="lever-container" id="lever-div">
+        <div class="lever-base">
+            <div class="lever-arm" id="lever-arm">
+                <div class="lever-knob" onclick="puxarAlavanca()"></div>
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
     const dadosTeste = [
-        { id: 1, url: 'link_da_imagem_1.jpg', correto: 12, tipo: "Controle (Todos enxergam)" },
-        { id: 2, url: 'link_da_imagem_2.jpg', correto: 8, tipo: "Protanopia/Deuteranopia" },
-        { id: 3, url: 'link_da_imagem_3.jpg', correto: 3, tipo: "Deuteranopia" },
-        { id: 4, url: 'link_da_imagem_4.jpg', correto: 42, tipo: "Daltonismo Vermelho-Verde" },
-        { id: 5, url: 'link_da_imagem_5.jpg', correto: 74, tipo: "Protanopia Grave" },
-        { id: 6, url: 'link_da_imagem_6.jpg', correto: 96, tipo: "Deuteranopia Grave" },
-        { id: 7, url: 'link_da_imagem_7.jpg', correto: 67, tipo: "Deficiência Geral" }
+        { id: 1, url: 'IMG_6395.jpeg', correto: 12, tipo: "Controle" },
+        { id: 2, url: 'IMG_6396.jpeg', correto: 8, tipo: "Protanopia/Deuteranopia" },
+        { id: 3, url: 'IMG_6397.gif', correto: 3, tipo: "Deuteranopia" },
+        { id: 4, url: 'IMG_6398.jpeg', correto: 42, tipo: "Daltonismo Vermelho-Verde" },
+        { id: 5, url: 'IMG_6399.png', correto: 74, tipo: "Protanopia Grave" },
+        { id: 6, url: 'IMG_6400.jpeg', correto: 96, tipo: "Deuteranopia Grave" },
+        { id: 7, url: 'IMG_6401.png', correto: 67, tipo: "Deficiência Geral" },
+        { id: 8, url: 'IMG_6402.png', correto: 2, tipo: "Protanopia/Deuteranopia" }
     ];
 
     let indiceAtual = 0;
     let errouAlguma = false;
 
+    function puxarAlavanca() {
+        const arm = document.getElementById('lever-arm');
+        arm.classList.add('pulled');
+        
+        setTimeout(() => {
+            arm.classList.remove('pulled');
+            if (indiceAtual === 0) iniciarTeste();
+        }, 500);
+    }
+
     function iniciarTeste() {
         document.getElementById('tela-inicial').classList.add('hidden');
+        document.getElementById('lever-div').classList.add('hidden');
         document.getElementById('tela-teste').classList.remove('hidden');
         carregarPergunta();
     }
 
     function carregarPergunta() {
         const pergunta = dadosTeste[indiceAtual];
-        document.getElementById('titulo-pergunta').innerText = `Imagem ${pergunta.id}`;
+        document.getElementById('titulo-pergunta').innerText = `Sorteio ${pergunta.id}`;
         document.getElementById('img-ishihara').src = pergunta.url;
         document.getElementById('resposta-usuario').value = '';
         document.getElementById('feedback-erro').classList.add('hidden');
@@ -88,14 +178,8 @@
 
         if (resposta !== correto) {
             errouAlguma = true;
-            feedback.innerHTML = `
-                <b>[ERRO]</b><br>
-                Você digitou: ${resposta}<br>
-                O número real era: ${correto}<br>
-                Indicação: ${dadosTeste[indiceAtual].tipo}
-            `;
+            feedback.innerHTML = `PERDEU!<br>Era ${correto}. Indicação: ${dadosTeste[indiceAtual].tipo}`;
             feedback.classList.remove('hidden');
-            // Não avança se errar, ou você pode decidir se ele continua mesmo errando.
         } else {
             avancar();
         }
@@ -106,20 +190,15 @@
         if (indiceAtual < dadosTeste.length) {
             carregarPergunta();
         } else {
-            finalizar();
-        }
-    }
-
-    function finalizar() {
-        document.getElementById('tela-teste').classList.add('hidden');
-        if (!errouAlguma) {
-            document.getElementById('tela-final').classList.remove('hidden');
-        } else {
-            alert("Teste finalizado. Verifique os erros apontados durante o percurso.");
-            location.reload();
+            document.getElementById('tela-teste').classList.add('hidden');
+            if (!errouAlguma) {
+                document.getElementById('tela-final').classList.remove('hidden');
+            } else {
+                alert("Fim de jogo! Você teve erros.");
+                location.reload();
+            }
         }
     }
 </script>
-
 </body>
 </html>

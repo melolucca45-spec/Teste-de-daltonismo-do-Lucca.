@@ -5,38 +5,95 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teste de Daltonismo do Lucca</title>
     <style>
-        body { font-family: sans-serif; text-align: center; padding: 20px; }
-        img { max-width: 300px; border-radius: 10px; margin-bottom: 20px; }
-        input { padding: 10px; width: 80px; font-size: 16px; }
-        button { padding: 10px 20px; background: black; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        body { font-family: sans-serif; text-align: center; padding: 20px; background-color: #f4f4f4; }
+        #teste-container { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: inline-block; max-width: 90%; }
+        img { max-width: 100%; height: auto; border-radius: 10px; margin-bottom: 20px; border: 2px solid #ddd; }
+        input { padding: 12px; width: 100px; font-size: 18px; border: 2px solid #ccc; border-radius: 8px; margin-bottom: 10px; }
+        button { padding: 12px 25px; background: #000; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; }
+        .erro-item { color: #d93025; margin-bottom: 10px; text-align: left; }
     </style>
 </head>
 <body>
+
     <div id="teste-container">
         <h1>Teste de Daltonismo do Lucca</h1>
-        <img id="imagem-teste" src="IMG_6395.jpeg">
-        <br>
-        <input type="number" id="respostaUsuario" placeholder="Número">
-        <br><br>
-        <button onclick="verificarResposta()">Verificar</button>
+        <div id="conteudo">
+            <img id="imagem-teste" src="IMG_6395.jpeg">
+            <br>
+            <input type="number" id="respostaUsuario" placeholder="Número">
+            <br>
+            <button onclick="verificarResposta()">Verificar</button>
+        </div>
     </div>
 
     <script>
         let etapa = 0;
-        const imagens = ["IMG_6395.jpeg", "IMG_6396.jpeg", "IMG_6397.jpeg", "IMG_6398.jpeg", "IMG_6399.png", "IMG_6400.jpeg", "IMG_6401.jpeg", "IMG_6402.jpeg"];
+        // Dados das imagens: nome do arquivo, número correto e tipo de daltonismo se errar
+        const dadosTeste = [
+            { img: "IMG_6395.jpeg", correto: 12, tipo: "Controle (Todos enxergam)" },
+            { img: "IMG_6396.jpeg", correto: 8,  tipo: "Protanopia (Vermelho/Verde)" },
+            { img: "IMG_6397.jpeg", correto: 5,  tipo: "Deuteranopia (Verde/Vermelho)" },
+            { img: "IMG_6398.jpeg", correto: 29, tipo: "Daltonismo Geral" },
+            { img: "IMG_6399.png",  correto: 74, tipo: "Protanopia" },
+            { img: "IMG_6400.jpeg", correto: 7,  tipo: "Deuteranopia" },
+            { img: "IMG_6401.jpeg", correto: 45, tipo: "Daltonismo Geral" },
+            { img: "IMG_6402.jpeg", correto: 2,  tipo: "Protanopia" }
+        ];
+
+        let errosCometidos = [];
 
         function verificarResposta() {
-            etapa++;
-            if (etapa < imagens.length) {
-                document.getElementById("imagem-teste").src = imagens[etapa];
-                document.getElementById("respostaUsuario").value = "";
-            } else {
-                document.getElementById("teste-container").innerHTML = `
-                    <h2>Teste Finalizado!</h2>
-                    <p>O teste indica possíveis sinais de: <b>Daltonismo Vermelho/Verde</b>.</p>
-                    <button onclick="location.reload()">Refazer Teste</button>
-                `;
+            const resposta = document.getElementById("respostaUsuario").value;
+            
+            // Registra se o usuário errou
+            if (parseInt(resposta) !== dadosTeste[etapa].correto) {
+                errosCometidos.push({
+                    imagem: dadosTeste[etapa].img,
+                    numeroCerto: dadosTeste[etapa].correto,
+                    seuNumero: resposta || "Vazio",
+                    deficiencia: dadosTeste[etapa].tipo
+                });
             }
+
+            etapa++;
+
+            if (etapa < dadosTeste.length) {
+                // Passa para a próxima imagem
+                const proximaImg = document.getElementById("imagem-teste");
+                proximaImg.src = dadosTeste[etapa].img;
+                document.getElementById("respostaUsuario").value = "";
+                
+                // Alerta se a imagem falhar ao carregar (ajuda a debugar)
+                proximaImg.onerror = function() {
+                    alert("Erro ao carregar a imagem: " + dadosTeste[etapa].img + ". Verifique se o nome no GitHub está correto!");
+                };
+            } else {
+                // Finaliza e mostra os erros detalhados
+                exibirResultado();
+            }
+        }
+
+        function exibirResultado() {
+            let htmlResultado = "<h2>Resultado do Teste</h2>";
+            
+            if (errosCometidos.length === 0) {
+                htmlResultado += "<p style='color: green;'><b>Parabéns! Você acertou tudo.</b></p>";
+            } else {
+                htmlResultado += "<p>Você teve dificuldades nas seguintes imagens:</p>";
+                errosCometidos.forEach(item => {
+                    htmlResultado += `
+                        <div class="erro-item">
+                            <b>Imagem:</b> ${item.imagem}<br>
+                            <b>Número Correto:</b> ${item.numeroCerto} | <b>Você digitou:</b> ${item.seuNumero}<br>
+                            <b>Indicativo de:</b> ${item.deficiencia}<br>
+                            <hr>
+                        </div>
+                    `;
+                });
+            }
+            
+            htmlResultado += "<button onclick='location.reload()'>Refazer Teste</button>";
+            document.getElementById("conteudo").innerHTML = htmlResultado;
         }
     </script>
 </body>

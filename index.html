@@ -3,236 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <!-- TAG DE VERIFICAÇÃO DO GOOGLE -->
-    <meta name="google-site-verification" content="COLE_O_SEU_CODIGO_AQUI" />
     <title>Teste de Daltonismo do Lucca</title>
     <style>
-        body { 
-            font-family: 'Arial Black', sans-serif; 
-            background-color: #000; 
-            color: #fff;
-            text-align: center; 
-            padding: 10px;
-            overflow-x: hidden;
-            touch-action: pan-y;
-        }
-        /* Estrutura da Máquina Caça-Níquel */
-        .slot-machine { 
-            max-width: 450px; 
-            margin: 20px auto; 
-            background: linear-gradient(145deg, #d4af37, #b8860b); 
-            padding: 15px; 
-            border: 8px solid #4a0000; 
-            border-radius: 30px; 
-            box-shadow: 0 0 40px #ff4500, inset 0 0 20px rgba(0,0,0,0.5);
-            position: relative;
-        }
-        /* Visor Interno (Leitor) */
-        .visor-display {
-            background: #111;
-            color: #ff0000;
-            border: 4px solid #222;
-            padding: 15px;
-            border-radius: 15px;
-            min-height: 400px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            box-shadow: inset 0 0 15px #000;
-            font-family: 'Courier New', Courier, monospace;
-        }
-        .screen-content {
-            background: #fff;
-            color: #333;
-            width: 90%;
-            border-radius: 10px;
-            padding: 10px;
-            border: 3px solid #d4af37;
-        }
-        h1 { color: #ff0000; text-shadow: 2px 2px #000; font-size: 1.5em; letter-spacing: 2px; }
-        .promo-text { color: #00ff00; font-weight: bold; text-shadow: 1px 1px #000; }
-
-        /* Alavanca Manual lateral */
-        .lever-system {
-            position: absolute;
-            right: -45px;
-            top: 100px;
-            width: 30px;
-            height: 150px;
-        }
-        .lever-shaft {
-            width: 12px;
-            height: 100px;
-            background: #666;
-            margin: auto;
-            border-radius: 5px;
-            position: relative;
-        }
-        .lever-arm {
-            width: 8px;
-            height: 90px;
-            background: #999;
-            position: absolute;
-            bottom: 10px;
-            left: 2px;
-            transform-origin: bottom;
-            touch-action: none;
-        }
-        .lever-ball {
-            width: 45px;
-            height: 45px;
-            background: radial-gradient(circle at 30% 30%, #ff1111, #4a0000);
-            border-radius: 50%;
-            position: absolute;
-            top: -40px;
-            left: -18px;
-            cursor: grab;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.6);
-        }
-
-        .img-container { width: 100%; max-width: 230px; border: 4px solid #d4af37; border-radius: 5px; margin: 10px 0; }
+        body { font-family: 'Arial Black', sans-serif; background-color: #000; color: #fff; text-align: center; padding: 10px; overflow-x: hidden; touch-action: pan-y; }
+        .slot-machine { max-width: 420px; margin: 20px auto; background: linear-gradient(145deg, #d4af37, #8b6d11); padding: 20px; border: 10px solid #4a0000; border-radius: 40px; box-shadow: 0 0 60px #ff4500; position: relative; }
+        .visor-display { background: #050505; color: #ff0000; border: 6px solid #222; padding: 20px; border-radius: 20px; min-height: 420px; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: inset 0 0 30px #000; }
+        .screen-content { background: #fff; color: #333; width: 95%; border-radius: 15px; padding: 15px; border: 4px solid #d4af37; }
+        h1 { color: #ff0000; text-shadow: 2px 2px #000; font-size: 1.4em; margin: 0; }
+        .promo { color: #00ff00; font-family: 'Courier New', monospace; font-weight: bold; margin: 10px 0; }
         
-        /* Botão Verificar Estilo Cassino */
-        .btn-verify { 
-            background: linear-gradient(#00ff00, #008000); 
-            color: #fff; 
-            padding: 12px 25px; 
-            border: 2px solid gold; 
-            border-radius: 10px; 
-            font-weight: bold;
-            font-size: 1.1em;
-            cursor: pointer;
-            text-shadow: 1px 1px #000;
-            box-shadow: 0 4px #004d00;
-        }
-        .btn-verify:active { transform: translateY(2px); box-shadow: 0 2px #004d00; }
-        
+        /* Alavanca Lateral Profissional */
+        .lever-system { position: absolute; right: -50px; top: 120px; width: 40px; height: 160px; }
+        .lever-shaft { width: 15px; height: 110px; background: #555; margin: auto; border-radius: 8px; position: relative; border: 2px solid #333; }
+        .lever-arm { width: 10px; height: 100px; background: linear-gradient(#999, #666); position: absolute; bottom: 10px; left: 1px; transform-origin: bottom; touch-action: none; }
+        .lever-ball { width: 55px; height: 55px; background: radial-gradient(circle at 30% 30%, #ff0000, #660000); border-radius: 50%; position: absolute; top: -45px; left: -22px; cursor: grab; box-shadow: 0 6px 12px rgba(0,0,0,0.8); }
+
+        .img-box { width: 100%; max-width: 240px; border: 5px solid #d4af37; border-radius: 10px; margin: 15px 0; }
+        .btn-verify { background: linear-gradient(#28a745, #1e7e34); color: #fff; padding: 15px 35px; border: 3px solid gold; border-radius: 12px; font-weight: bold; font-size: 1.2em; cursor: pointer; text-shadow: 2px 2px #000; box-shadow: 0 5px #145523; }
+        .btn-verify:active { transform: translateY(3px); box-shadow: 0 2px #145523; }
         .hidden { display: none !important; }
-        .result-bad { color: #fff; background: #8b0000; padding: 10px; border-radius: 5px; margin-top: 10px; font-size: 0.9em; }
-        .jackpot-box { color: #fff; background: #155724; border: 4px solid #ffd700; padding: 20px; border-radius: 10px; animation: blink 0.5s infinite; }
-        
-        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+        .jackpot { color: #fff; background: #004d00; border: 5px double #ffd700; padding: 25px; border-radius: 15px; }
     </style>
 </head>
 <body>
 
 <div class="slot-machine">
     <div class="visor-display">
-        <!-- LEITOR INICIAL -->
         <div id="tela-inicial">
             <h1>TESTE DE DALTONISMO</h1>
-            <p class="promo-text">APOSTE NA SUA VISÃO!</p>
-            <p style="color: #ffcc00; font-size: 0.7em; margin-top: 40px;">[PUXE A ALAVANCA PARA INICIAR]</p>
+            <p class="promo">APOSTE NA SUA VISÃO!</p>
+            <p style="color: #ffcc00; font-size: 0.8em; margin-top: 60px;">⬇️ DESLIZE A ALAVANCA</p>
         </div>
 
-        <!-- TELA DO TESTE (VISOR) -->
         <div id="tela-teste" class="hidden screen-content">
-            <h3 id="label-pergunta" style="margin: 5px; font-size: 0.9em;">IMAGEM DE ISHIHARA 1</h3>
-            <img id="img-ishihara" src="" class="img-container">
+            <h2 id="label-pergunta" style="margin: 0; font-size: 1em;">IMAGEM DE ISHIHARA 1</h2>
+            <img id="img-ishihara" src="" class="img-box">
             <br>
-            <input type="number" id="user-input" placeholder="?" style="width: 60px; height: 40px; font-size: 20px; text-align: center; border: 2px solid #8b0000; border-radius: 5px;">
+            <input type="number" id="user-ans" placeholder="?" style="width: 80px; height: 50px; font-size: 24px; text-align: center; border: 3px solid #8b0000; border-radius: 10px;">
             <br><br>
-            <button class="btn-verify" onclick="validarResposta()">VERIFICAR</button>
-            <div id="msg-erro" class="result-bad hidden"></div>
+            <button class="btn-verify" onclick="checar()">VERIFICAR</button>
         </div>
 
-        <!-- TELA FINAL -->
         <div id="tela-final" class="hidden">
-            <div class="jackpot-box">
+            <div class="jackpot">
                 <h2 style="margin:0;">🎰 JACKPOT 🎰</h2>
-                <p style="font-size: 0.8em;">VISÃO NORMAL: TODAS AS IMAGENS ACERTADAS!</p>
+                <p style="font-size: 0.9em;">VISÃO NORMAL!</p>
             </div>
-            <button class="btn-verify" style="margin-top:20px; background: #007bff;" onclick="location.reload()">JOGAR NOVAMENTE</button>
+            <button class="btn-verify" style="margin-top:20px; background: #007bff; box-shadow: 0 5px #004085;" onclick="location.reload()">REPETIR</button>
         </div>
     </div>
 
-    <!-- ALAVANCA MANUAL -->
     <div class="lever-system" id="lever-box">
         <div class="lever-shaft">
-            <div class="lever-arm" id="arm-rotate">
-                <div class="lever-ball" id="lever-ball"></div>
+            <div class="lever-arm" id="arm">
+                <div class="lever-ball" id="ball"></div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    const dataset = [
-        { id: 1, url: 'IMG_6395.jpeg', ans: 12, diag: "Controle" },
-        { id: 2, url: 'IMG_6396.jpeg', ans: 8, diag: "Protanopia/Deuteranopia" },
-        { id: 3, url: 'IMG_6397.gif', ans: 3, diag: "Deuteranopia" },
-        { id: 4, url: 'IMG_6398.jpeg', ans: 42, diag: "Daltonismo Vermelho-Verde" },
-        { id: 5, url: 'IMG_6399.png', ans: 74, diag: "Protanopia Grave" },
-        { id: 6, url: 'IMG_6400.jpeg', ans: 96, diag: "Deuteranopia Grave" },
-        { id: 7, url: 'IMG_6401.png', ans: 67, diag: "Deficiência Geral" },
-        { id: 8, url: 'IMG_6402.png', ans: 2, diag: "Protanopia/Deuteranopia" }
+    const clips = [
+        { id: 1, url: 'IMG_6395.jpeg', res: 12 }, { id: 2, url: 'IMG_6396.jpeg', res: 8 },
+        { id: 3, url: 'IMG_6397.gif', res: 3 }, { id: 4, url: 'IMG_6398.jpeg', res: 42 },
+        { id: 5, url: 'IMG_6399.png', res: 74 }, { id: 6, url: 'IMG_6400.jpeg', res: 96 },
+        { id: 7, url: 'IMG_6401.png', res: 67 }, { id: 8, url: 'IMG_6402.png', res: 2 }
     ];
 
-    let currentStep = 0;
-    let hasErrors = false;
+    let step = 0;
+    let errors = false;
+    const ball = document.getElementById('ball');
+    const arm = document.getElementById('arm');
+    let sY = 0;
 
-    // Controle da Alavanca
-    const ball = document.getElementById('lever-ball');
-    const arm = document.getElementById('arm-rotate');
-    let touchStart = 0;
-
-    ball.addEventListener('touchstart', (e) => { touchStart = e.touches[0].clientY; });
+    ball.addEventListener('touchstart', (e) => { sY = e.touches[0].clientY; });
     ball.addEventListener('touchmove', (e) => {
-        let delta = e.touches[0].clientY - touchStart;
-        if (delta > 0 && delta < 130) {
-            arm.style.transform = `rotateX(${delta}deg)`;
-        }
-        if (delta >= 120) { startTest(); }
+        let d = e.touches[0].clientY - sY;
+        if (d > 0 && d < 140) arm.style.transform = `rotateX(${d}deg)`;
+        if (d >= 130) go();
     });
-    ball.addEventListener('touchend', () => { if (currentStep === 0) arm.style.transform = `rotateX(0deg)`; });
+    ball.addEventListener('touchend', () => { if (step === 0) arm.style.transform = `rotateX(0deg)`; });
 
-    function startTest() {
+    function go() {
         arm.style.transform = `rotateX(160deg)`;
         setTimeout(() => {
             document.getElementById('tela-inicial').classList.add('hidden');
             document.getElementById('lever-box').classList.add('hidden');
             document.getElementById('tela-teste').classList.remove('hidden');
-            loadImg();
-        }, 350);
+            show();
+        }, 300);
     }
 
-    function loadImg() {
-        const item = dataset[currentStep];
-        document.getElementById('label-pergunta').innerText = `IMAGEM DE ISHIHARA ${item.id}`;
-        document.getElementById('img-ishihara').src = item.url;
-        document.getElementById('user-input').value = '';
-        document.getElementById('msg-erro').classList.add('hidden');
+    function show() {
+        document.getElementById('label-pergunta').innerText = `IMAGEM DE ISHIHARA ${clips[step].id}`;
+        document.getElementById('img-ishihara').src = clips[step].url;
+        document.getElementById('user-ans').value = '';
     }
 
-    function validarResposta() {
-        const val = parseInt(document.getElementById('user-input').value);
-        const correct = dataset[currentStep].ans;
-        const feedback = document.getElementById('msg-erro');
-
-        if (isNaN(val)) return;
-
-        if (val !== correct) {
-            hasErrors = true;
-            feedback.innerHTML = `⚠️ ERROU!<br>Era ${correct}.<br>Indicação: ${dataset[currentStep].diag}`;
-            feedback.classList.remove('hidden');
-        } else {
-            next();
-        }
-    }
-
-    function next() {
-        currentStep++;
-        if (currentStep < dataset.length) {
-            loadImg();
-        } else {
+    function checar() {
+        const a = parseInt(document.getElementById('user-ans').value);
+        if (isNaN(a)) return;
+        if (a !== clips[step].res) errors = true;
+        step++;
+        if (step < clips.length) show();
+        else {
             document.getElementById('tela-teste').classList.add('hidden');
-            if (!hasErrors) {
-                document.getElementById('tela-final').classList.remove('hidden');
-            } else {
-                alert("FIM DE JOGO! VOCÊ TEVE ERROS.");
-                location.reload();
-            }
+            if (!errors) document.getElementById('tela-final').classList.remove('hidden');
+            else { alert("FIM! VOCÊ ERROU ALGUMAS."); location.reload(); }
         }
     }
 </script>

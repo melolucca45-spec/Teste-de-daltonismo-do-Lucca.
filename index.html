@@ -27,30 +27,31 @@
     </div>
     <div id="resultado" class="feedback">
         <strong id="msg-topo"></strong><br>
-        <span id="msg-diag" style="color: #d33; font-weight: bold; display: block; margin-top: 5px;"></span>
+        <span id="msg-diag" style="font-weight: bold; display: block; margin-top: 5px;"></span>
         <button class="btn-green" onclick="proxima()">PRÓXIMA ➡️</button>
     </div>
 </div>
+
 <script>
-    // LISTA ATUALIZADA COM OS NOMES DO SEU PRINT
+    // SEQUÊNCIA EXATA DAS IMAGENS QUE VOCÊ MANDOU
     const lista = [
-        { p: 'IMG_6395.jpeg', r: 12, d: "VISÃO NORMAL" },
-        { p: 'IMG_6396.jpeg', r: 2, d: "DEUTERANOPIA" },
-        { p: 'IMG_6397.gif', r: 42, d: "PROTANOPIA" },
-        { p: 'IMG_6398.jpeg', r: 74, d: "DEFICIÊNCIA VERDE" },
-        { p: 'IMG_6399.png', r: 6, d: "PROTANOPIA SEVERA" },
-        { p: 'IMG_6400.jpeg', r: 45, d: "DALTONISMO GERAL" },
-        { p: 'IMG_6401.png', r: 5, d: "DEFICIÊNCIA AZUL" },
-        { p: 'IMG_6402.png', r: 16, d: "VISÃO NORMAL" }
+        { p: 'IMG_6395.jpeg', r: 96, d: "PROTANOPIA/DEUTERANOPIA" },
+        { p: 'IMG_6396.jpeg', r: 42, d: "DEUTERANOPIA" },
+        { p: 'IMG_6397.gif', r: 5, d: "PROTANOPIA" },
+        { p: 'IMG_6398.jpeg', r: 12, d: "VISÃO NORMAL (CONTROLE)" },
+        { p: 'IMG_6399.png', r: 7, d: "DEFICIÊNCIA VERDE/VERMELHO" },
+        { p: 'IMG_6400.jpeg', r: 74, d: "PROTANOPIA SEVERA" },
+        { p: 'IMG_6401.png', r: 2, d: "ACROMATOPSIA (TOTAL)" }
     ];
 
     let atual = 0;
+
     function carregar() {
         document.getElementById('sirene').style.background = '#444';
+        document.getElementById('sirene').style.boxShadow = 'none';
         document.getElementById('resultado').style.display = 'none';
         document.getElementById('acao').style.display = 'block';
         document.getElementById('titulo').innerText = "Imagem #" + (atual + 1);
-        // O Date.now() força o celular a baixar a imagem nova
         document.getElementById('foto').src = lista[atual].p + "?t=" + Date.now();
         document.getElementById('campo-numero').value = '';
     }
@@ -58,24 +59,41 @@
     function conferir() {
         const chute = document.getElementById('campo-numero').value;
         const siren = document.getElementById('sirene');
+        const msgDiag = document.getElementById('msg-diag');
+        const msgTopo = document.getElementById('msg-topo');
+        
         document.getElementById('acao').style.display = 'none';
         document.getElementById('resultado').style.display = 'block';
+
         if (chute == lista[atual].r) {
+            // ACERTO: LUZ VERDE
             siren.style.background = '#28a745';
-            document.getElementById('msg-topo').innerText = "✅ CORRETO!";
-            document.getElementById('msg-topo').style.color = "green";
+            siren.style.boxShadow = '0 0 20px #28a745';
+            msgTopo.innerText = "✅ CORRETO!";
+            msgTopo.style.color = "green";
+            msgDiag.innerText = "VISÃO NORMAL";
+            msgDiag.style.color = "green";
         } else {
+            // ERRO: LUZ VERMELHA
             siren.style.background = '#d33';
-            document.getElementById('msg-topo').innerText = "❌ INCORRETO!";
-            document.getElementById('msg-topo').style.color = "red";
-            document.getElementById('msg-diag').innerText = "DIAGNÓSTICO: " + lista[atual].d;
+            siren.style.boxShadow = '0 0 20px #d33';
+            msgTopo.innerText = "❌ INCORRETO!";
+            msgTopo.style.color = "red";
+            msgDiag.innerText = "SINAL DE: " + lista[atual].d;
+            msgDiag.style.color = "#d33";
         }
     }
 
     function proxima() {
         atual++;
-        if (atual < lista.length) carregar(); else location.reload();
+        if (atual < lista.length) {
+            carregar();
+        } else {
+            alert("Teste finalizado!");
+            location.reload();
+        }
     }
+
     carregar();
 </script>
 </body>

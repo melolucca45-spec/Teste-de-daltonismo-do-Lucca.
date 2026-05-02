@@ -3,13 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- COLOQUE SUA TAG DO GOOGLE ABAIXO -->
-    <meta name="google-site-verification" content="COLE_O_SEU_CODIGO_AQUI" />
-    
     <title>Cassino da Visão do Lucca</title>
     <style>
         body { 
-            font-family: 'Arial Black', Gadget, sans-serif; 
+            font-family: 'Arial Black', sans-serif; 
             background-color: #1a1a1a; 
             color: #fff;
             text-align: center; 
@@ -17,8 +14,8 @@
         }
         .casino-machine { 
             max-width: 500px; 
-            margin: auto; 
-            background: #d4af37; /* Cor de Ouro */
+            margin: 50px auto; 
+            background: #d4af37; 
             padding: 20px; 
             border: 10px solid #8b0000; 
             border-radius: 20px; 
@@ -31,62 +28,63 @@
             border: 5px solid #222;
             padding: 20px;
             border-radius: 10px;
-            min-height: 300px;
+            min-height: 350px;
         }
-        h1 { color: #8b0000; text-shadow: 2px 2px #ff0000; }
+        h1 { color: #8b0000; text-shadow: 2px 2px #ff0000; margin-top: 0; }
 
-        /* Estilo da Alavanca */
+        /* Estilo da Alavanca Realista */
         .lever-container {
             position: absolute;
-            right: -60px;
-            top: 100px;
-            width: 50px;
-            height: 150px;
+            right: -55px;
+            top: 80px;
+            width: 40px;
+            height: 180px;
         }
         .lever-base {
-            width: 20px;
-            height: 100px;
-            background: #555;
+            width: 15px;
+            height: 120px;
+            background: #444;
             margin: auto;
             border-radius: 10px;
             position: relative;
         }
         .lever-arm {
-            width: 15px;
-            height: 80px;
+            width: 10px;
+            height: 100px;
             background: #888;
             position: absolute;
-            top: 0;
+            bottom: 20px;
             left: 2px;
             transform-origin: bottom;
-            transition: transform 0.3s;
+            transition: transform 0.4s cubic-bezier(0.45, 0.05, 0.55, 0.95);
         }
         .lever-knob {
-            width: 40px;
-            height: 40px;
-            background: red;
+            width: 45px;
+            height: 45px;
+            background: radial-gradient(circle at 30% 30%, #ff0000, #8b0000);
             border-radius: 50%;
             position: absolute;
-            top: -30px;
-            left: -12px;
+            top: -40px;
+            left: -17px;
             cursor: pointer;
-            box-shadow: 0 0 10px #000;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.5);
         }
-        .lever-arm.pulled { transform: rotateX(180deg); }
+        .pulled { transform: rotateX(160deg); }
 
-        .imagem-teste { width: 100%; max-width: 250px; border: 5px solid #d4af37; border-radius: 10px; margin-top: 10px; }
+        .imagem-teste { width: 100%; max-width: 250px; border: 5px solid #d4af37; border-radius: 10px; margin: 15px 0; }
         .btn-casino { 
             background: linear-gradient(#ff0000, #8b0000); 
             color: gold; 
-            padding: 10px 20px; 
+            padding: 15px 30px; 
             border: 2px solid gold; 
             border-radius: 5px; 
             font-weight: bold;
+            font-size: 1.1em;
             cursor: pointer;
         }
-        .hidden { display: none; }
-        .erro-msg { color: #fff; background-color: #8b0000; padding: 10px; border-radius: 5px; margin-top: 10px; }
-        .sucesso-final { color: #ffd700; background-color: #006400; padding: 20px; border: 3px solid gold; border-radius: 10px; }
+        .hidden { display: none !important; }
+        .erro-msg { color: #fff; background-color: #8b0000; padding: 15px; border-radius: 8px; margin-top: 15px; }
+        .jackpot { color: #ffd700; background-color: #006400; padding: 30px; border: 5px double gold; border-radius: 10px; font-size: 1.5em; }
     </style>
 </head>
 <body>
@@ -96,16 +94,16 @@
         <!-- TELA INICIAL -->
         <div id="tela-inicial">
             <h1>CASSINO DA VISÃO</h1>
-            <p>Nível: Simples (Ishihara)</p>
-            <p style="font-size: 0.8em;">Puxe a alavanca para apostar na sua visão!</p>
+            <p>Aposte na sua visão!</p>
+            <p style="color: #666; font-size: 0.9em; margin-top: 40px;">➔ PUXE A ALAVANCA PARA COMEÇAR</p>
         </div>
 
         <!-- TELA DO TESTE -->
         <div id="tela-teste" class="hidden">
-            <h2 id="titulo-pergunta">Imagem 1</h2>
+            <h2 id="titulo-pergunta">SORTEIO 1</h2>
             <img id="img-ishihara" src="" class="imagem-teste">
-            <br><br>
-            <input type="number" id="resposta-usuario" placeholder="Número?" style="width: 60px; padding: 5px;">
+            <br>
+            <input type="number" id="resposta-usuario" placeholder="?" style="width: 80px; padding: 10px; font-size: 20px; text-align: center; border: 2px solid #d4af37;">
             <br><br>
             <button class="btn-casino" onclick="validarPasso()">APOSTAR</button>
             <div id="feedback-erro" class="erro-msg hidden"></div>
@@ -113,25 +111,26 @@
 
         <!-- TELA FINAL -->
         <div id="tela-final" class="hidden">
-            <div class="sucesso-final">
-                🎰 JACKPOT! 🎰<br>
-                Visão Normal: Você acertou tudo!
+            <div class="jackpot">
+                🎰 JACKPOT! 🎰<br><br>
+                <span style="font-size: 0.7em;">Visão Normal: Você acertou tudo!</span>
             </div>
             <button class="btn-casino" style="margin-top:20px;" onclick="location.reload()">JOGAR DE NOVO</button>
         </div>
     </div>
 
-    <!-- ALAVANCA -->
-    <div class="lever-container" id="lever-div">
+    <!-- ALAVANCA MECÂNICA -->
+    <div class="lever-container" id="lever-container">
         <div class="lever-base">
             <div class="lever-arm" id="lever-arm">
-                <div class="lever-knob" onclick="puxarAlavanca()"></div>
+                <div class="lever-knob" onclick="ativarAlavanca()"></div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
+    // URLs baseadas nos arquivos exatos da sua imagem image_79.png
     const dadosTeste = [
         { id: 1, url: 'IMG_6395.jpeg', correto: 12, tipo: "Controle" },
         { id: 2, url: 'IMG_6396.jpeg', correto: 8, tipo: "Protanopia/Deuteranopia" },
@@ -146,26 +145,22 @@
     let indiceAtual = 0;
     let errouAlguma = false;
 
-    function puxarAlavanca() {
+    function ativarAlavanca() {
         const arm = document.getElementById('lever-arm');
         arm.classList.add('pulled');
         
         setTimeout(() => {
             arm.classList.remove('pulled');
-            if (indiceAtual === 0) iniciarTeste();
-        }, 500);
-    }
-
-    function iniciarTeste() {
-        document.getElementById('tela-inicial').classList.add('hidden');
-        document.getElementById('lever-div').classList.add('hidden');
-        document.getElementById('tela-teste').classList.remove('hidden');
-        carregarPergunta();
+            document.getElementById('tela-inicial').classList.add('hidden');
+            document.getElementById('lever-container').classList.add('hidden');
+            document.getElementById('tela-teste').classList.remove('hidden');
+            carregarPergunta();
+        }, 600);
     }
 
     function carregarPergunta() {
         const pergunta = dadosTeste[indiceAtual];
-        document.getElementById('titulo-pergunta').innerText = `Sorteio ${pergunta.id}`;
+        document.getElementById('titulo-pergunta').innerText = `SORTEIO ${pergunta.id}`;
         document.getElementById('img-ishihara').src = pergunta.url;
         document.getElementById('resposta-usuario').value = '';
         document.getElementById('feedback-erro').classList.add('hidden');
@@ -176,9 +171,11 @@
         const correto = dadosTeste[indiceAtual].correto;
         const feedback = document.getElementById('feedback-erro');
 
+        if (isNaN(resposta)) return;
+
         if (resposta !== correto) {
             errouAlguma = true;
-            feedback.innerHTML = `PERDEU!<br>Era ${correto}. Indicação: ${dadosTeste[indiceAtual].tipo}`;
+            feedback.innerHTML = `❌ PERDEU!<br>O número era ${correto}.<br>Indicação: ${dadosTeste[indiceAtual].tipo}`;
             feedback.classList.remove('hidden');
         } else {
             avancar();
@@ -194,7 +191,7 @@
             if (!errouAlguma) {
                 document.getElementById('tela-final').classList.remove('hidden');
             } else {
-                alert("Fim de jogo! Você teve erros.");
+                alert("Fim de jogo! Você teve erros no percurso.");
                 location.reload();
             }
         }

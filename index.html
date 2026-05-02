@@ -19,7 +19,6 @@
             overflow: hidden;
         }
 
-        /* Máquina de Luxo */
         .slot-machine {
             width: 360px;
             background: linear-gradient(145deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
@@ -27,21 +26,9 @@
             border-radius: 20px 20px 60px 60px;
             position: relative;
             padding: 15px;
-            box-shadow: 0 0 50px rgba(212, 175, 55, 0.5), inset 0 0 20px rgba(0,0,0,0.5);
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.5);
         }
 
-        /* Luz de Alerta */
-        .top-light {
-            width: 60px;
-            height: 30px;
-            background: #ff0000;
-            margin: -40px auto 10px;
-            border-radius: 15px 15px 0 0;
-            box-shadow: 0 0 25px #ff0000;
-            border: 3px solid #222;
-        }
-
-        /* Visor Branco em todas as telas */
         .visor-display {
             background: #ffffff;
             border: 8px solid #333;
@@ -54,13 +41,10 @@
             align-items: center;
             box-shadow: inset 0 0 20px rgba(0,0,0,0.2);
             color: #000;
-            position: relative;
         }
 
-        h1 { font-family: 'Luckiest Guy', cursive; color: #d40000; font-size: 1.8em; margin: 0; letter-spacing: 2px; }
-        .promo { color: #1a5e1a; font-weight: bold; margin-bottom: 20px; }
+        h1 { font-family: 'Luckiest Guy', cursive; color: #d40000; font-size: 1.8em; margin: 0; text-align: center; }
 
-        /* Alavanca Profissional */
         .lever-system { position: absolute; right: -50px; top: 150px; width: 45px; height: 180px; }
         .lever-arm {
             width: 16px; height: 120px;
@@ -80,9 +64,9 @@
 
         .btn-verify {
             background: #1a1a1a; color: gold; border: 2px solid gold;
-            padding: 15px; font-weight: bold; font-size: 1.1em;
+            padding: 12px; font-weight: bold; font-size: 1.1em;
             border-radius: 10px; cursor: pointer; width: 100%;
-            font-family: 'Luckiest Guy', cursive;
+            font-family: 'Luckiest Guy', cursive; margin-top: 10px;
         }
 
         input[type=number] {
@@ -90,66 +74,64 @@
             border: 4px solid #222; border-radius: 10px; margin: 10px;
         }
 
-        .feedback-error { color: #d40000; font-weight: bold; font-size: 0.8em; padding: 10px; }
+        .feedback-box { 
+            background: #fff0f0; border: 2px solid #d40000; 
+            padding: 15px; border-radius: 10px; margin-top: 10px;
+            color: #d40000; font-size: 0.8em; text-align: center;
+        }
+
         .hidden { display: none !important; }
-        .success-text { color: #008000; font-family: 'Luckiest Guy', cursive; }
     </style>
 </head>
 <body>
 
 <div class="slot-machine">
-    <div class="top-light" id="light"></div>
     <div class="visor-display">
         
-        <!-- TELA 1: FUNDO BRANCO -->
         <div id="tela-inicial">
             <h1>CASSINO<br>DA VISÃO</h1>
-            <p class="promo">JACKPOT DE CORES</p>
-            <div style="font-size: 40px;">🎰</div>
-            <p style="color: #666; font-size: 0.7em; margin-top: 30px;">[ PUXE A ALAVANCA ]</p>
+            <div style="font-size: 40px; margin: 20px;">🎰</div>
+            <p style="color: #666; font-size: 0.7em;">[ PUXE A ALAVANCA ]</p>
         </div>
 
-        <!-- TELA 2: TESTE -->
         <div id="tela-teste" class="hidden">
-            <p id="label-atual" style="margin:0; font-size: 0.7em; font-weight: bold;">ISHIHARA #1</p>
-            <img id="img-display" src="" class="img-test">
+            <p id="label-passo" style="margin:0; font-size: 0.7em; font-weight: bold;">IMAGEM #1</p>
+            <img id="img-target" src="" class="img-test">
             
-            <div id="container-input">
-                <input type="number" id="user-input" pattern="[0-9]*" inputmode="numeric">
+            <div id="area-input">
+                <input type="number" id="input-user" pattern="[0-9]*" inputmode="numeric">
                 <button class="btn-verify" onclick="validar()">VERIFICAR</button>
             </div>
 
-            <!-- FEEDBACK NA HORA -->
-            <div id="feedback" class="hidden feedback-error">
-                O correto era <span id="correto-n"></span>.<br>
-                Você colocou <span id="digitado-n"></span>.<br>
-                <span id="tipo-daltonismo"></span>
-                <br>
-                <button class="btn-verify" style="margin-top:10px;" onclick="proxima()">CONTINUAR</button>
+            <div id="feedback-imediato" class="hidden feedback-box">
+                <p><b>ERRO DETECTADO!</b></p>
+                O correto era: <span id="info-correto"></span><br>
+                Você digitou: <span id="info-digitado"></span><br>
+                <p><i><span id="info-diagnostico"></span></i></p>
+                <button class="btn-verify" onclick="proxima()">CONTINUAR ➡️</button>
             </div>
         </div>
 
-        <!-- TELA 3: FINAL -->
         <div id="tela-final" class="hidden">
-            <h1 id="status-final">RESULTADO</h1>
-            <div id="lista-erros" style="font-size: 0.7em; text-align: left; margin: 15px 0;"></div>
-            <button class="btn-verify" onclick="location.reload()">REPETIR TESTE</button>
+            <h1 id="resultado-titulo"></h1>
+            <div id="relatorio-final" style="font-size: 0.7em; text-align: left; margin: 15px 0;"></div>
+            <button class="btn-verify" onclick="location.reload()">RECOMEÇAR</button>
         </div>
 
     </div>
 
-    <div class="lever-system" id="lever-box">
-        <div class="lever-arm" id="arm">
-            <div class="lever-ball" id="ball"></div>
+    <div class="lever-system" id="alavanca-container">
+        <div class="lever-arm" id="braco-alavanca">
+            <div class="lever-ball" id="bola-alavanca"></div>
         </div>
     </div>
 </div>
 
 <script>
+    // Nova ordem de números sincronizada: 45, 12, 42, 74, 96, 67, 2
     const clips = [
-        { url: 'IMG_6395.jpeg', res: 12, tipo: "Normal (Controle)" },
-        { url: 'IMG_6396.jpeg', res: 8, tipo: "Daltonismo Verde/Vermelho" },
-        { url: 'IMG_6397.gif', res: 3, tipo: "Daltonismo Verde/Vermelho" },
+        { url: 'IMG_6398.jpeg', res: 45, tipo: "Daltonismo Protanopia/Deuteranopia" },
+        { url: 'IMG_6395.jpeg', res: 12, tipo: "Visão Normal (Controle)" },
         { url: 'IMG_6398.jpeg', res: 42, tipo: "Daltonismo Protanopia/Deuteranopia" },
         { url: 'IMG_6399.png', res: 74, tipo: "Daltonismo Verde/Vermelho" },
         { url: 'IMG_6400.jpeg', res: 96, tipo: "Daltonismo Verde/Vermelho" },
@@ -157,80 +139,79 @@
         { url: 'IMG_6402.png', res: 2, tipo: "Daltonismo Total (Acromatopsia)" }
     ];
 
-    let index = 0;
-    let historicoErros = [];
-    const arm = document.getElementById('arm');
-    const ball = document.getElementById('ball');
-    let startY = 0;
+    let currentIdx = 0;
+    let listaErros = [];
+    const braco = document.getElementById('braco-alavanca');
+    const bola = document.getElementById('bola-alavanca');
+    let touchY = 0;
 
-    ball.addEventListener('touchstart', (e) => { startY = e.touches[0].clientY; e.preventDefault(); }, {passive: false});
-    ball.addEventListener('touchmove', (e) => {
-        let move = e.touches[0].clientY - startY;
-        if (move > 0 && move < 140) arm.style.transform = `rotateX(${move}deg)`;
-        if (move >= 130) start();
+    bola.addEventListener('touchstart', (e) => { touchY = e.touches[0].clientY; e.preventDefault(); }, {passive: false});
+    bola.addEventListener('touchmove', (e) => {
+        let diff = e.touches[0].clientY - touchY;
+        if (diff > 0 && diff < 140) braco.style.transform = `rotateX(${diff}deg)`;
+        if (diff >= 130) iniciarJogo();
         e.preventDefault();
     }, {passive: false});
 
-    function start() {
-        arm.style.transform = `rotateX(150deg)`;
-        document.getElementById('light').style.background = '#00ff00';
-        document.getElementById('light').style.boxShadow = '0 0 25px #00ff00';
+    function iniciarJogo() {
+        braco.style.transform = `rotateX(150deg)`;
         setTimeout(() => {
             document.getElementById('tela-inicial').classList.add('hidden');
-            document.getElementById('lever-box').classList.add('hidden');
+            document.getElementById('alavanca-container').classList.add('hidden');
             document.getElementById('tela-teste').classList.remove('hidden');
-            render();
+            renderizar();
         }, 300);
     }
 
-    function render() {
-        document.getElementById('feedback').classList.add('hidden');
-        document.getElementById('container-input').classList.remove('hidden');
-        document.getElementById('label-atual').innerText = `IMAGEM DE ISHIHARA #${index + 1}`;
-        document.getElementById('img-display').src = clips[index].url;
-        document.getElementById('user-input').value = '';
+    function renderizar() {
+        document.getElementById('feedback-imediato').classList.add('hidden');
+        document.getElementById('area-input').classList.remove('hidden');
+        document.getElementById('label-passo').innerText = `IMAGEM #${currentIdx + 1}`;
+        document.getElementById('img-target').src = clips[currentIdx].url;
+        document.getElementById('input-user').value = '';
     }
 
     function validar() {
-        const val = parseInt(document.getElementById('user-input').value);
-        if (isNaN(val)) return;
+        const chute = parseInt(document.getElementById('input-user').value);
+        if (isNaN(chute)) return;
 
-        if (val !== clips[index].res) {
-            historicoErros.push({id: index+1, correto: clips[index].res, digitado: val});
-            // Mostra erro na hora
-            document.getElementById('container-input').classList.add('hidden');
-            document.getElementById('feedback').classList.remove('hidden');
-            document.getElementById('correto-n').innerText = clips[index].res;
-            document.getElementById('digitado-n').innerText = val;
-            document.getElementById('tipo-daltonismo').innerText = `Suspeita de: ${clips[index].tipo}`;
+        if (chute !== clips[currentIdx].res) {
+            listaErros.push({id: currentIdx + 1, esperado: clips[currentIdx].res, real: chute});
+            
+            // Exibe feedback em vermelho na hora
+            document.getElementById('area-input').classList.add('hidden');
+            document.getElementById('feedback-imediato').classList.remove('hidden');
+            document.getElementById('info-correto').innerText = clips[currentIdx].res;
+            document.getElementById('info-digitado').innerText = chute;
+            document.getElementById('info-diagnostico').innerText = `Indicativo de: ${clips[currentIdx].tipo}`;
         } else {
             proxima();
         }
     }
 
     function proxima() {
-        index++;
-        if (index < clips.length) render();
-        else finalizar();
+        currentIdx++;
+        if (currentIdx < clips.length) renderizar();
+        else finalizarJogo();
     }
 
-    function finalizar() {
+    function finalizarJogo() {
         document.getElementById('tela-teste').classList.add('hidden');
         document.getElementById('tela-final').classList.remove('hidden');
         
-        const status = document.getElementById('status-final');
-        const lista = document.getElementById('lista-erros');
+        const tit = document.getElementById('resultado-titulo');
+        const rel = document.getElementById('relatorio-final');
 
-        if (historicoErros.length === 0) {
-            status.innerText = "VISÃO NORMAL";
-            status.className = "success-text";
-            lista.innerHTML = "🎯 Parabéns! Você acertou todas as imagens do cassino.";
+        if (listaErros.length === 0) {
+            tit.innerText = "VISÃO NORMAL";
+            tit.style.color = "#008000";
+            rel.innerHTML = "🎯 Você passou no teste sem nenhum erro!";
         } else {
-            status.innerText = "TESTE FINALIZADO";
-            status.style.color = "#d40000";
-            lista.innerHTML = "<b>Relatório de Erros:</b><br>";
-            historicoErros.forEach(e => {
-                lista.innerHTML += `• Na Imagem ${e.id}: era ${e.correto} e você pôs ${e.digitado}.<br>`;
+            tit.innerText = "TESTE CONCLUÍDO";
+            tit.style.color = "#d40000";
+            rel.innerHTML = "<b>Resumo das dificuldades:</b><br>";
+            listaErros.forEach(e => {
+                rel.innerHTML += `• Imagem ${e.id}: era ${e.esperado} e você pôs ${e.real}.<br>`;
             });
         }
     }

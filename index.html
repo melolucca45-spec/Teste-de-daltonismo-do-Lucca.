@@ -7,120 +7,114 @@
     <style>
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { 
-            background-color: #000; 
+            background-color: #1a1a1a; 
             margin: 0; 
             display: flex; 
             justify-content: center; 
             align-items: center; 
             height: 100vh; 
             font-family: 'Arial Black', sans-serif;
-            overflow: hidden; /* Trava a tela para a alavanca funcionar */
+            overflow: hidden;
         }
 
-        /* Máquina inspirada na imagem real */
+        /* Máquina com acabamento premium */
         .slot-machine {
-            width: 340px;
-            background: linear-gradient(to bottom, #555, #222);
-            border: 6px solid #1a1a1a;
-            border-radius: 10px 10px 30px 30px;
+            width: 350px;
+            background: linear-gradient(145deg, #666, #222);
+            border: 8px solid #111;
+            border-radius: 20px 20px 50px 50px;
             position: relative;
-            padding: 15px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 20px rgba(255,255,255,0.1);
-        }
-
-        /* Topo da máquina (Luminária) */
-        .top-light {
-            width: 40px;
-            height: 20px;
-            background: #ffcc00;
-            margin: -25px auto 5px;
-            border-radius: 5px 5px 0 0;
-            box-shadow: 0 0 15px #ffcc00;
-        }
-
-        /* Visor Digital (Igual à tela de cima da foto) */
-        .visor-display {
-            background: #000;
-            border: 4px solid #d4af37;
-            border-radius: 5px;
             padding: 20px;
-            min-height: 400px;
+            box-shadow: 0 30px 60px rgba(0,0,0,1);
+        }
+
+        .top-light {
+            width: 50px;
+            height: 25px;
+            background: #ff0000;
+            margin: -35px auto 10px;
+            border-radius: 10px 10px 0 0;
+            box-shadow: 0 0 20px #ff0000;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink { 50% { opacity: 0.5; } }
+
+        /* Visor com FUNDO BRANCO como solicitado */
+        .visor-display {
+            background: #ffffff; /* Fundo branco solicitado */
+            border: 10px solid #d4af37;
+            border-radius: 10px;
+            padding: 15px;
+            min-height: 420px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            position: relative;
-            box-shadow: inset 0 0 20px #ff0000;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
+            color: #000;
         }
 
-        .screen-paper {
-            background: #fff;
-            width: 100%;
-            border-radius: 5px;
-            padding: 10px;
-            color: #222;
-        }
+        h1 { color: #d40000; font-size: 1.4em; margin: 0; text-align: center; }
+        .promo { color: #008000; font-weight: bold; margin: 5px 0; font-size: 0.9em; }
 
-        h1 { color: #ff0000; font-size: 1.2em; margin: 0; text-transform: uppercase; }
-        .promo { color: #00ff00; font-size: 0.8em; margin: 10px 0; }
-
-        /* Alavanca Lateral Mecânica */
+        /* Alavanca Lateral */
         .lever-system {
             position: absolute;
-            right: -40px;
-            top: 150px;
+            right: -45px;
+            top: 140px;
             width: 40px;
-            height: 150px;
-        }
-        .lever-base-joint {
-            width: 20px;
-            height: 40px;
-            background: #333;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            border-radius: 0 5px 5px 0;
+            height: 160px;
         }
         .lever-arm {
-            width: 12px;
-            height: 100px;
-            background: linear-gradient(to right, #999, #666);
+            width: 14px;
+            height: 110px;
+            background: linear-gradient(to right, #bbb, #777);
             position: absolute;
             bottom: 20px;
-            left: 4px;
+            left: 5px;
             transform-origin: bottom;
             touch-action: none;
+            border: 1px solid #444;
         }
         .lever-ball {
-            width: 50px;
-            height: 50px;
-            background: radial-gradient(circle at 30% 30%, #ff0000, #660000);
+            width: 55px;
+            height: 55px;
+            background: radial-gradient(circle at 30% 30%, #ff1111, #800000);
             border-radius: 50%;
             position: absolute;
-            top: -45px;
-            left: -19px;
-            cursor: grab;
-            box-shadow: 0 5px 10px rgba(0,0,0,0.5);
+            top: -50px;
+            left: -21px;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.6);
         }
 
-        .img-test { width: 100%; max-width: 200px; border: 3px solid #d4af37; margin: 10px 0; }
+        .img-test { width: 100%; max-width: 220px; border: 4px solid #333; border-radius: 5px; margin: 10px 0; }
 
-        /* Botão Verificar Estilo Cassino Antigo */
         .btn-verify {
-            background: linear-gradient(#ffcc00, #b8860b);
-            border: 2px solid #000;
-            color: #000;
-            padding: 12px 20px;
+            background: linear-gradient(#28a745, #1e7e34);
+            border: 2px solid #fff;
+            color: #fff;
+            padding: 15px 25px;
             font-weight: bold;
-            font-size: 1em;
-            border-radius: 5px;
-            box-shadow: 0 4px #664a00;
+            font-size: 1.1em;
+            border-radius: 10px;
+            box-shadow: 0 5px #145523;
             cursor: pointer;
+            width: 100%;
         }
-        .btn-verify:active { transform: translateY(2px); box-shadow: 0 2px #664a00; }
+        .btn-verify:active { transform: translateY(3px); box-shadow: 0 2px #145523; }
+
+        input[type=number] {
+            width: 100px;
+            height: 50px;
+            font-size: 1.8em;
+            text-align: center;
+            border: 4px solid #d4af37;
+            border-radius: 10px;
+            background: #fff;
+            color: #000;
+        }
 
         .hidden { display: none !important; }
-        .jackpot { background: #004d00; border: 4px gold double; padding: 20px; border-radius: 10px; color: #fff; }
     </style>
 </head>
 <body>
@@ -130,101 +124,94 @@
     <div class="visor-display">
         
         <div id="tela-inicial">
-            <h1>TESTE DE<br>DALTONISMO</h1>
-            <p class="promo">APOSTE NA SUA VISÃO!</p>
-            <p style="color: #ffcc00; font-size: 0.7em; margin-top: 40px;">[ PUXE A ALAVANCA ]</p>
+            <h1>CASSINO DA VISÃO</h1>
+            <p class="promo">VALE UM JACKPOT?</p>
+            <p style="color: #333; font-size: 0.8em; margin-top: 50px;">⬇️ PUXE PARA COMEÇAR</p>
         </div>
 
-        <div id="tela-teste" class="hidden screen-paper">
-            <p id="ishihara-title" style="margin: 0; font-weight: bold; font-size: 0.8em;">IMAGEM DE ISHIHARA 1</p>
-            <img id="img-target" src="" class="img-test">
+        <div id="tela-teste" class="hidden">
+            <p id="info-topo" style="margin:0; font-weight:bold; font-size: 0.7em;">TESTE DE ISHIHARA</p>
+            <img id="img-atual" src="" class="img-test">
             <br>
-            <input type="number" id="input-val" placeholder="?" style="width: 60px; height: 40px; text-align: center; border: 2px solid #4a0000; font-size: 1.2em; border-radius: 5px;">
+            <input type="number" id="campo-resposta" pattern="\[0-9\]*" inputmode="numeric">
             <br><br>
             <button class="btn-verify" onclick="validar()">VERIFICAR</button>
         </div>
 
-        <div id="tela-final" class="hidden jackpot">
-            <h2 style="margin:0;">🎰 JACKPOT 🎰</h2>
-            <p style="font-size: 0.7em;">VOCÊ ACERTOU TUDO!</p>
-            <button class="btn-verify" onclick="location.reload()">REPETIR</button>
+        <div id="tela-final" class="hidden" style="text-align:center;">
+            <h1 style="color: gold;">🎰 JACKPOT!</h1>
+            <p>VISÃO PERFEITA!</p>
+            <button class="btn-verify" style="background:#007bff;" onclick="location.reload()">NOVO JOGO</button>
         </div>
 
     </div>
 
-    <!-- Sistema da Alavanca -->
-    <div class="lever-system">
-        <div class="lever-base-joint"></div>
-        <div class="lever-arm" id="lever-arm">
-            <div class="lever-ball" id="lever-ball"></div>
+    <div class="lever-system" id="box-alavanca">
+        <div class="lever-arm" id="braco">
+            <div class="lever-ball" id="bola"></div>
         </div>
     </div>
 </div>
 
 <script>
+    // Respostas validadas conforme suas imagens
     const clips = [
-        { id: 1, url: 'IMG_6395.jpeg', res: 12 }, { id: 2, url: 'IMG_6396.jpeg', res: 8 },
-        { id: 3, url: 'IMG_6397.gif', res: 3 }, { id: 4, url: 'IMG_6398.jpeg', res: 42 },
-        { id: 5, url: 'IMG_6399.png', res: 74 }, { id: 6, url: 'IMG_6400.jpeg', res: 96 },
-        { id: 7, url: 'IMG_6401.png', res: 67 }, { id: 8, url: 'IMG_6402.png', res: 2 }
+        { url: 'IMG_6395.jpeg', res: 12 }, { url: 'IMG_6396.jpeg', res: 8 },
+        { url: 'IMG_6397.gif', res: 3 }, { url: 'IMG_6398.jpeg', res: 42 },
+        { url: 'IMG_6399.png', res: 74 }, { url: 'IMG_6400.jpeg', res: 96 },
+        { url: 'IMG_6401.png', res: 67 }, { url: 'IMG_6402.png', res: 2 }
     ];
 
-    let current = 0;
-    let fail = false;
-    const arm = document.getElementById('lever-arm');
-    const ball = document.getElementById('lever-ball');
-    let startY = 0;
+    let atual = 0;
+    let errou = false;
+    const braco = document.getElementById('braco');
+    const bola = document.getElementById('bola');
+    let inicialY = 0;
 
-    // Lógica para destravar a alavanca e travar a rolagem da tela
-    ball.addEventListener('touchstart', (e) => {
-        startY = e.touches[0].clientY;
-        e.preventDefault(); // Impede a tela de subir/descer
-    }, { passive: false });
-
-    ball.addEventListener('touchmove', (e) => {
-        let diff = e.touches[0].clientY - startY;
-        if (diff > 0 && diff < 130) {
-            arm.style.transform = `rotateX(${diff}deg)`;
-        }
-        if (diff >= 120) {
-            iniciar();
-        }
+    bola.addEventListener('touchstart', (e) => { inicialY = e.touches[0].clientY; e.preventDefault(); }, {passive: false});
+    bola.addEventListener('touchmove', (e) => {
+        let movimento = e.touches[0].clientY - inicialY;
+        if (movimento > 0 && movimento < 140) braco.style.transform = `rotateX(${movimento}deg)`;
+        if (movimento >= 130) iniciar();
         e.preventDefault();
-    }, { passive: false });
+    }, {passive: false});
 
-    ball.addEventListener('touchend', () => {
-        if (current === 0) arm.style.transform = `rotateX(0deg)`;
-    });
+    bola.addEventListener('touchend', () => { if (atual === 0) braco.style.transform = `rotateX(0deg)`; });
 
     function iniciar() {
-        arm.style.transform = `rotateX(150deg)`;
+        braco.style.transform = `rotateX(150deg)`;
         setTimeout(() => {
             document.getElementById('tela-inicial').classList.add('hidden');
-            document.querySelector('.lever-system').classList.add('hidden');
+            document.getElementById('box-alavanca').classList.add('hidden');
             document.getElementById('tela-teste').classList.remove('hidden');
-            render();
+            mostrar();
         }, 300);
     }
 
-    function render() {
-        document.getElementById('ishihara-title').innerText = `IMAGEM DE ISHIHARA ${clips[current].id}`;
-        document.getElementById('img-target').src = clips[current].url;
-        document.getElementById('input-val').value = '';
+    function mostrar() {
+        document.getElementById('img-atual').src = clips[atual].url;
+        document.getElementById('campo-resposta').value = '';
+        document.getElementById('campo-resposta').focus();
     }
 
     function validar() {
-        const v = parseInt(document.getElementById('input-val').value);
-        if (isNaN(v)) return;
-        if (v !== clips[current].res) fail = true;
-        
-        current++;
-        if (current < clips.length) render();
-        else {
+        const resp = parseInt(document.getElementById('campo-resposta').value);
+        if (isNaN(resp)) return;
+
+        // Validação rigorosa dos números
+        if (resp !== clips[atual].res) {
+            errou = true;
+        }
+
+        atual++;
+        if (atual < clips.length) {
+            mostrar();
+        } else {
             document.getElementById('tela-teste').classList.add('hidden');
-            if (!fail) {
+            if (!errou) {
                 document.getElementById('tela-final').classList.remove('hidden');
             } else {
-                alert("FIM DE JOGO! VOCÊ ERROU.");
+                alert("TESTE FINALIZADO! VOCÊ TEVE ERROS NA IDENTIFICAÇÃO.");
                 location.reload();
             }
         }

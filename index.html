@@ -5,126 +5,110 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Teste de Daltonismo do Lucca</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; display: flex; flex-direction: column; align-items: center; background-color: #ffffff; margin: 0; padding: 20px; }
+        body { font-family: -apple-system, system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; background-color: #ffffff; margin: 0; padding: 20px; }
         .container { width: 100%; max-width: 400px; text-align: center; }
-        .header h1 { font-size: 1.8em; color: #333; margin: 10px 0 25px 0; font-weight: 800; }
-        .img-box { width: 100%; aspect-ratio: 1/1; background: #f2f2f2; border-radius: 20px; overflow: hidden; margin-bottom: 25px; border: 1px solid #e0e0e0; display: flex; align-items: center; justify-content: center; }
+        h1 { font-size: 1.8em; margin: 20px 0; color: #333; }
+        .img-box { width: 100%; aspect-ratio: 1/1; background: #f9f9f9; border-radius: 20px; border: 1px solid #eee; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         img { width: 100%; height: 100%; object-fit: contain; }
-        input { width: 100%; padding: 18px; font-size: 1.4em; text-align: center; border: 2px solid #e0e0e0; border-radius: 15px; margin-bottom: 15px; box-sizing: border-box; color: #333; }
-        .btn-check { background-color: #007bff; color: white; border: none; padding: 18px; border-radius: 15px; width: 100%; font-size: 1.2em; font-weight: bold; cursor: pointer; }
-        .btn-next { background-color: #28a745; color: white; border: none; padding: 18px; border-radius: 15px; width: 100%; font-size: 1.2em; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .result-area { margin-top: 15px; padding: 15px; border-radius: 15px; display: none; }
-        .diag-label { display: block; color: #dc3545; font-weight: bold; font-size: 1em; margin-top: 10px; }
+        input { width: 100%; padding: 15px; font-size: 1.3em; text-align: center; border: 2px solid #ddd; border-radius: 12px; margin-bottom: 15px; box-sizing: border-box; }
+        .btn-blue { background-color: #007bff; color: white; border: none; padding: 18px; border-radius: 12px; width: 100%; font-size: 1.1em; font-weight: bold; }
+        .btn-green { background-color: #28a745; color: white; border: none; padding: 18px; border-radius: 12px; width: 100%; font-size: 1.1em; font-weight: bold; margin-top: 10px; }
+        .feedback { margin-top: 15px; padding: 15px; border-radius: 12px; display: none; }
         .hidden { display: none; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header">
-        <h1 id="contador">Imagem #1</h1>
-    </div>
+    <h1 id="titulo">Imagem #1</h1>
 
-    <div id="quiz-space">
+    <div id="jogo">
         <div class="img-box">
-            <img id="display-img" src="" alt="Carregando imagem...">
+            <img id="foto" src="">
         </div>
         
-        <div id="input-group">
-            <input type="number" id="user-answer" inputmode="numeric" placeholder="Digite o número">
-            <button class="btn-check" onclick="verificarResposta()">VERIFICAR</button>
+        <div id="acao">
+            <input type="number" id="campo-numero" inputmode="numeric" placeholder="Digite o número">
+            <button class="btn-blue" onclick="conferir()">VERIFICAR</button>
         </div>
 
-        <div id="feedback" class="result-area">
-            <strong id="feedback-msg" style="font-size: 1.2em;"></strong>
-            <span id="diagnostico-msg" class="diag-label"></span>
-            <button class="btn-next" onclick="irParaProxima()">PRÓXIMA ➡️</button>
+        <div id="resultado" class="feedback">
+            <strong id="msg-topo"></strong><br>
+            <span id="msg-diag" style="color: #d33; font-weight: bold; display: block; margin-top: 5px;"></span>
+            <button class="btn-green" onclick="proxima()">PRÓXIMA ➡️</button>
         </div>
     </div>
 
-    <div id="final-screen" class="hidden">
-        <h2 style="font-size: 1.8em;">Laudo Final</h2>
-        <div id="summary" style="text-align: left; background: #f8f9fa; padding: 20px; border-radius: 15px; margin-bottom: 20px; line-height: 1.6;"></div>
-        <button class="btn-check" onclick="location.reload()">REFAZER TESTE</button>
+    <div id="final" class="hidden">
+        <h2>Resultado Final</h2>
+        <div id="resumo" style="text-align: left; background: #f1f1f1; padding: 15px; border-radius: 12px;"></div>
+        <button class="btn-blue" style="margin-top: 20px;" onclick="location.reload()">RECOMEÇAR</button>
     </div>
 </div>
 
 <script>
-    const database = [
-        { img: 'image_93.png', ans: 42, info: "DEUTERANOPIA (VERDE)" },
-        { img: 'image_94.png', ans: 12, info: "VISÃO NORMAL" },
-        { img: 'image_96.png', ans: 45, info: "PROTANOPIA (VERMELHO)" },
-        { img: 'image_99.png', ans: 74, info: "DEFICIÊNCIA VERDE/AMARELO" },
-        { img: 'image_95.png', ans: 96, info: "DALTONISMO PROTAN/DEUTAN" },
-        { img: 'image_100.png', ans: 67, info: "PROTANOPIA SEVERA" },
-        { img: 'image_98.png', ans: 2, info: "ACROMATOPSIA (TOTAL)" }
+    // Lista de imagens e respostas conforme seus arquivos no GitHub
+    const lista = [
+        { p: 'image_93.png', r: 42, d: "DEUTERANOPIA (VERDE)" },
+        { p: 'image_94.png', r: 12, d: "VISÃO NORMAL" },
+        { p: 'image_96.png', r: 45, d: "PROTANOPIA (VERMELHO)" },
+        { p: 'image_99.png', r: 74, d: "DEFICIÊNCIA VERDE/AMARELO" },
+        { p: 'image_95.png', r: 96, d: "DALTONISMO PROTAN/DEUTAN" },
+        { p: 'image_100.png', r: 67, d: "PROTANOPIA SEVERA" },
+        { p: 'image_98.png', r: 2, d: "ACROMATOPSIA (TOTAL)" }
     ];
 
-    let currentIdx = 0;
-    let score = 0;
-    let failLog = [];
+    let atual = 0, nota = 0, erros = [];
 
-    function loadQuestion() {
-        document.getElementById('feedback').style.display = 'none';
-        document.getElementById('input-group').style.display = 'block';
-        document.getElementById('contador').innerText = "Imagem #" + (currentIdx + 1);
+    function carregar() {
+        document.getElementById('resultado').style.display = 'none';
+        document.getElementById('acao').style.display = 'block';
+        document.getElementById('titulo').innerText = "Imagem #" + (atual + 1);
+        // O "?v=" ajuda a forçar o navegador a carregar a imagem nova
+        document.getElementById('foto').src = lista[atual].p + "?v=" + Date.now();
+        document.getElementById('campo-numero').value = '';
+    }
+
+    function conferir() {
+        const chute = document.getElementById('campo-numero').value;
+        const certo = lista[atual].r.toString();
         
-        const imgElement = document.getElementById('display-img');
-        // Adicionando um timestamp para evitar problemas de cache no navegador
-        imgElement.src = database[currentIdx].img + "?v=" + new Date().getTime();
-        
-        document.getElementById('user-answer').value = '';
-    }
+        document.getElementById('acao').style.display = 'none';
+        document.getElementById('resultado').style.display = 'block';
 
-    function verificarResposta() {
-        const input = document.getElementById('user-answer').value;
-        const correct = database[currentIdx].ans.toString();
-        const msg = document.getElementById('feedback-msg');
-        const diag = document.getElementById('diagnostico-msg');
-
-        document.getElementById('input-group').style.display = 'none';
-        document.getElementById('feedback').style.display = 'block';
-
-        if (input === correct) {
-            score++;
-            msg.innerText = "✅ CORRETO!";
-            msg.style.color = "#28a745";
-            diag.innerText = "";
+        if (chute === certo) {
+            nota++;
+            document.getElementById('msg-topo').innerText = "✅ VOCÊ ACERTOU!";
+            document.getElementById('msg-topo').style.color = "green";
+            document.getElementById('msg-diag').innerText = "";
         } else {
-            failLog.push({n: currentIdx + 1, d: database[currentIdx].info});
-            msg.innerText = "❌ INCORRETO!";
-            msg.style.color = "#dc3545";
-            diag.innerText = "DIAGNÓSTICO: " + database[currentIdx].info;
+            erros.push({n: atual + 1, info: lista[atual].d});
+            document.getElementById('msg-topo').innerText = "❌ INCORRETO!";
+            document.getElementById('msg-topo').style.color = "red";
+            document.getElementById('msg-diag').innerText = "DIAGNÓSTICO: " + lista[atual].d;
         }
     }
 
-    function irParaProxima() {
-        currentIdx++;
-        if (currentIdx < database.length) {
-            loadQuestion();
-        } else {
-            showFinal();
-        }
+    function proxima() {
+        atual++;
+        if (atual < lista.length) carregar(); else finalizar();
     }
 
-    function showFinal() {
-        document.getElementById('quiz-space').classList.add('hidden');
-        document.getElementById('final-screen').classList.remove('hidden');
-        document.getElementById('contador').classList.add('hidden');
-        const summary = document.getElementById('summary');
-        let txt = "<strong>Acertos: " + score + " de " + database.length + "</strong><br><br>";
-        if (failLog.length > 0) {
-            txt += "<strong>Detalhes:</strong><br>";
-            failLog.forEach(item => {
-                txt += "• Imagem " + item.n + ": " + item.d + "<br>";
-            });
+    function finalizar() {
+        document.getElementById('jogo').classList.add('hidden');
+        document.getElementById('titulo').classList.add('hidden');
+        document.getElementById('final').classList.remove('hidden');
+        let rel = "<b>Acertos: " + nota + " de " + lista.length + "</b><br><br>";
+        if (erros.length > 0) {
+            rel += "<b>Diagnósticos:</b><br>";
+            erros.forEach(e => rel += "• Imagem " + e.n + ": " + e.info + "<br>");
         } else {
-            txt += "<span style='color:green; font-weight:bold;'>Parabéns! Sua visão para cores está normal.</span>";
+            rel += "<span style='color:green'>Sua visão está perfeita!</span>";
         }
-        summary.innerHTML = txt;
+        document.getElementById('resumo').innerHTML = rel;
     }
 
-    loadQuestion();
+    carregar();
 </script>
 </body>
 </html>

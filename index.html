@@ -12,7 +12,6 @@
         h1 { color: #ff0000; text-shadow: 2px 2px #000; font-size: 1.4em; margin: 0; }
         .promo { color: #00ff00; font-family: 'Courier New', monospace; font-weight: bold; margin: 10px 0; }
         
-        /* Alavanca Lateral Profissional */
         .lever-system { position: absolute; right: -50px; top: 120px; width: 40px; height: 160px; }
         .lever-shaft { width: 15px; height: 110px; background: #555; margin: auto; border-radius: 8px; position: relative; border: 2px solid #333; }
         .lever-arm { width: 10px; height: 100px; background: linear-gradient(#999, #666); position: absolute; bottom: 10px; left: 1px; transform-origin: bottom; touch-action: none; }
@@ -20,7 +19,6 @@
 
         .img-box { width: 100%; max-width: 240px; border: 5px solid #d4af37; border-radius: 10px; margin: 15px 0; }
         .btn-verify { background: linear-gradient(#28a745, #1e7e34); color: #fff; padding: 15px 35px; border: 3px solid gold; border-radius: 12px; font-weight: bold; font-size: 1.2em; cursor: pointer; text-shadow: 2px 2px #000; box-shadow: 0 5px #145523; }
-        .btn-verify:active { transform: translateY(3px); box-shadow: 0 2px #145523; }
         .hidden { display: none !important; }
         .jackpot { color: #fff; background: #004d00; border: 5px double #ffd700; padding: 25px; border-radius: 15px; }
     </style>
@@ -49,7 +47,7 @@
                 <h2 style="margin:0;">🎰 JACKPOT 🎰</h2>
                 <p style="font-size: 0.9em;">VISÃO NORMAL!</p>
             </div>
-            <button class="btn-verify" style="margin-top:20px; background: #007bff; box-shadow: 0 5px #004085;" onclick="location.reload()">REPETIR</button>
+            <button class="btn-verify" style="margin-top:20px; background: #007bff;" onclick="location.reload()">REPETIR</button>
         </div>
     </div>
 
@@ -63,11 +61,16 @@
 </div>
 
 <script>
+    // Respostas sincronizadas com os arquivos da imagem image_79.png
     const clips = [
-        { id: 1, url: 'IMG_6395.jpeg', res: 12 }, { id: 2, url: 'IMG_6396.jpeg', res: 8 },
-        { id: 3, url: 'IMG_6397.gif', res: 3 }, { id: 4, url: 'IMG_6398.jpeg', res: 42 },
-        { id: 5, url: 'IMG_6399.png', res: 74 }, { id: 6, url: 'IMG_6400.jpeg', res: 96 },
-        { id: 7, url: 'IMG_6401.png', res: 67 }, { id: 8, url: 'IMG_6402.png', res: 2 }
+        { id: 1, url: 'IMG_6395.jpeg', res: 12 }, 
+        { id: 2, url: 'IMG_6396.jpeg', res: 8 },
+        { id: 3, url: 'IMG_6397.gif', res: 3 }, 
+        { id: 4, url: 'IMG_6398.jpeg', res: 42 },
+        { id: 5, url: 'IMG_6399.png', res: 74 }, 
+        { id: 6, url: 'IMG_6400.jpeg', res: 96 },
+        { id: 7, url: 'IMG_6401.png', res: 67 }, 
+        { id: 8, url: 'IMG_6402.png', res: 2 }
     ];
 
     let step = 0;

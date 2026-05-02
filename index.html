@@ -7,7 +7,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Roboto+Mono:wght@700&display=swap');
 
-        /* Impede qualquer movimento da página no iPhone */
+        /* Trava o scroll do iPhone para a alavanca funcionar */
         html, body { 
             position: fixed; overflow: hidden; width: 100%; height: 100%; 
             margin: 0; background-color: #1a1a1a; touch-action: none; 
@@ -30,9 +30,9 @@
         h1 { font-family: 'Luckiest Guy', cursive; color: #d40000; font-size: 1.5em; margin: 0; text-align: center; }
         .subtitle { font-size: 0.5em; color: #333; font-weight: bold; margin: 5px 0 15px; text-align: center; }
 
-        /* ALAVANCA NA ESQUERDA PARA FUGIR DOS MENUS DO IPHONE */
+        /* ALAVANCA NA DIREITA (CORRIGIDA) */
         .lever-system {
-            position: absolute; left: -50px; top: 100px; width: 60px; height: 200px; z-index: 999;
+            position: absolute; right: -50px; top: 100px; width: 60px; height: 200px; z-index: 999;
         }
         .lever-arm {
             width: 16px; height: 110px; background: #666; border: 2px solid #222;
@@ -57,7 +57,7 @@
     <div class="visor">
         <div id="tela-inicial">
             <h1>CASSINO<br>DA VISÃO</h1>
-            <p class="subtitle">Teste de daltonismo - Versão 13</p>
+            <p class="subtitle">Teste de daltonismo - Versão 14</p>
             <div style="font-size: 40px;">🎰</div>
             <p style="color: #d40000; font-weight: bold; font-size: 0.7em; margin-top: 20px;">⬇️ PUXE A BOLA VERMELHA ⬇️</p>
         </div>
@@ -70,9 +70,15 @@
                 <button class="btn" onclick="validar()">VERIFICAR</button>
             </div>
         </div>
+
+        <div id="tela-final" class="hidden">
+            <h1>FIM DO TESTE</h1>
+            <div id="relatorio" style="font-size: 0.75em; margin: 20px 0;"></div>
+            <button class="btn" onclick="location.reload()">RECOMEÇAR</button>
+        </div>
     </div>
 
-    <!-- ALAVANCA ESQUERDA -->
+    <!-- ALAVANCA LADO DIREITO -->
     <div class="lever-system">
         <div class="lever-arm" id="braco">
             <div class="lever-ball" id="bola"></div>
@@ -82,18 +88,18 @@
 
 <script>
     const clips = [
-        { url: 'IMG_6395.jpeg', res: 12 },
         { url: 'IMG_6398.jpeg', res: 45 },
+        { url: 'IMG_6395.jpeg', res: 12 },
         { url: 'IMG_6399.png', res: 74 },
         { url: 'IMG_6400.jpeg', res: 96 }
     ];
 
     let index = 0;
+    let erros = [];
     const braco = document.getElementById('braco');
     const bola = document.getElementById('bola');
     let startY = 0;
 
-    // Detecta o toque e trava o resto
     bola.addEventListener('touchstart', (e) => {
         startY = e.touches[0].clientY;
         e.preventDefault();
@@ -130,12 +136,30 @@
 
     function validar() {
         const val = parseInt(document.getElementById('user-input').value);
+        if (isNaN(val)) return;
+
         if (val === clips[index].res) {
             index++;
             if (index < clips.length) render();
-            else alert("Teste Concluído!");
+            else finalizar();
         } else {
-            alert("Erro! Tente novamente.");
+            erros.push({id: index + 1, exp: clips[index].res, foi: val});
+            index++;
+            if (index < clips.length) render();
+            else finalizar();
+        }
+    }
+
+    function finalizar() {
+        document.getElementById('tela-teste').classList.add('hidden');
+        document.getElementById('tela-final').classList.remove('hidden');
+        const r = document.getElementById('relatorio');
+        if (erros.length === 0) {
+            r.innerHTML = "🎯 Visão perfeita! Você acertou tudo.";
+        } else {
+            erros.forEach(e => {
+                r.innerHTML += `• Imagem ${e.id}: era ${e.exp}, você pôs ${e.foi}<br>`;
+            });
         }
     }
 </script>

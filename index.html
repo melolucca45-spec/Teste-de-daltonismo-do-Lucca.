@@ -3,118 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Cassino da Visão - Lucca</title>
+    <title>Teste de Daltonismo do Lucca</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Roboto+Mono:wght@700&display=swap');
-        html, body { position: fixed; overflow: hidden; width: 100%; height: 100%; margin: 0; background-color: #1a1a1a; touch-action: none; }
-        body { display: flex; justify-content: center; align-items: center; font-family: 'Roboto Mono', monospace; }
-        .slot-machine { width: 310px; background: linear-gradient(to bottom, #cf9e2e, #f9f0b1, #8c6a1b); border: 8px solid #222; border-radius: 15px 15px 40px 40px; position: relative; padding: 10px; box-shadow: 0 20px 40px rgba(0,0,0,0.8); }
-        .siren { width: 60px; height: 30px; background: #444; position: absolute; top: -35px; left: 50%; transform: translateX(-50%); border-radius: 20px 20px 0 0; border: 3px solid #111; transition: 0.3s; }
-        .visor { background: white; border: 6px solid #333; border-radius: 10px; min-height: 420px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 15px; position: relative; }
-        h1 { font-family: 'Luckiest Guy', cursive; color: #d40000; font-size: 1.4em; margin: 0; text-align: center; }
-        .img-test { width: 100%; max-height: 190px; object-fit: contain; border: 4px solid #d4af37; border-radius: 8px; margin: 5px 0; }
-        .btn { background: #1a1a1a; color: gold; border: 2px solid gold; padding: 12px; border-radius: 8px; width: 100%; font-family: 'Luckiest Guy'; cursor: pointer; }
-        input { width: 90px; height: 45px; font-size: 1.8em; text-align: center; border: 3px solid #222; border-radius: 8px; margin-bottom: 5px; }
-        .hidden { display: none !important; }
-        .lever-system { position: absolute; right: -50px; top: 120px; width: 60px; height: 200px; z-index: 999; }
-        .lever-arm { width: 16px; height: 110px; background: #666; border: 2px solid #222; position: absolute; bottom: 40px; left: 20px; transform-origin: bottom; border-radius: 8px; }
-        .lever-ball { width: 65px; height: 65px; background: radial-gradient(circle at 30% 30%, #ff0000, #660000); border-radius: 50%; position: absolute; top: -55px; left: -25px; box-shadow: 0 5px 15px rgba(0,0,0,0.6); }
+        body { font-family: Arial, sans-serif; display: flex; flex-direction: column; align-items: center; background-color: #f0f0f0; margin: 0; padding: 20px; }
+        .container { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 350px; text-align: center; }
+        .siren { width: 100px; height: 40px; background: #444; border-radius: 20px 20px 0 0; margin: 0 auto 10px; border: 3px solid #222; }
+        img { width: 100%; border-radius: 10px; margin-bottom: 15px; border: 2px solid #ddd; }
+        input { width: 80%; padding: 12px; font-size: 1.2em; text-align: center; border: 2px solid #ccc; border-radius: 8px; margin-bottom: 15px; }
+        .btn { background-color: #28a745; color: white; border: none; padding: 15px; border-radius: 8px; width: 100%; font-size: 1.1em; font-weight: bold; cursor: pointer; }
+        .feedback { margin-top: 15px; padding: 10px; border-radius: 8px; display: none; }
+        .diag-text { color: #d40000; font-weight: bold; margin-top: 5px; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
 
-<div class="slot-machine">
+<div class="container">
     <div class="siren" id="sirene"></div>
-    <div class="visor">
-        <div id="tela-inicial">
-            <h1>CASSINO<br>DA VISÃO</h1>
-            <div style="font-size: 50px; text-align: center;">🎰</div>
-            <p style="color: #d40000; font-weight: bold; font-size: 0.7em; margin-top: 20px; text-align: center;">PUXE A ALAVANCA</p>
+    <div id="tela-teste">
+        <h2 id="titulo">Imagem #1</h2>
+        <img id="imagem" src="">
+        <div id="controle">
+            <input type="number" id="resposta" inputmode="numeric" placeholder="Qual número você vê?">
+            <button class="btn" onclick="verificar()">VERIFICAR</button>
         </div>
-
-        <div id="tela-teste" class="hidden">
-            <p id="label" style="font-size: 0.7em; font-weight: bold; color: #333;">IMAGEM #1</p>
-            <img id="img-target" src="" class="img-test">
-            <div id="game-controls">
-                <input type="number" id="user-input" inputmode="numeric">
-                <button class="btn" onclick="validar()">VERIFICAR</button>
-            </div>
-            <div id="feedback-area" class="hidden" style="text-align: center;">
-                <p id="msg-status" style="font-weight: bold; margin: 0;"></p>
-                <p id="msg-deficiencia" style="color: #d40000; font-size: 0.8em; font-weight: bold; margin: 5px 0;"></p>
-                <button class="btn" onclick="proxima()">PRÓXIMA ➡️</button>
-            </div>
-        </div>
-
-        <div id="tela-final" class="hidden">
-            <h1>LAUDO FINAL</h1>
-            <div id="relatorio" style="font-size: 0.6em; text-align: left; margin: 10px 0;"></div>
-            <button class="btn" onclick="location.reload()">REINICIAR</button>
+        <div id="resultado" class="feedback">
+            <p id="status-texto"></p>
+            <p id="diagnostico" class="diag-text"></p>
+            <button class="btn" style="background-color: #007bff; margin-top: 10px;" onclick="proxima()">PRÓXIMA ➡️</button>
         </div>
     </div>
-    <div class="lever-system"><div class="lever-arm" id="braco"><div class="lever-ball" id="bola"></div></div></div>
+
+    <div id="tela-final" class="hidden">
+        <h2>Laudo Final</h2>
+        <div id="relatorio" style="text-align: left; font-size: 0.9em; margin-bottom: 20px;"></div>
+        <button class="btn" onclick="location.reload()">REINICIAR TESTE</button>
+    </div>
 </div>
 
 <script>
     const clips = [
-        { url: 'image_96.png', res: 45, def: "PROTANOPIA (VERMELHO)" },
-        { url: 'image_94.png', res: 12, def: "VISÃO NORMAL" },
         { url: 'image_93.png', res: 42, def: "DEUTERANOPIA (VERDE)" },
-        { url: 'image_99.png', res: 74, def: "DALTONISMO VERDE/AMARELO" },
+        { url: 'image_94.png', res: 12, def: "VISÃO NORMAL" },
+        { url: 'image_96.png', res: 45, def: "PROTANOPIA (VERMELHO)" },
+        { url: 'image_99.png', res: 74, def: "DEFICIÊNCIA VERDE/AMARELO" },
         { url: 'image_95.png', res: 96, def: "DALTONISMO PROTAN/DEUTAN" },
         { url: 'image_100.png', res: 67, def: "PROTANOPIA SEVERA" },
         { url: 'image_98.png', res: 2, def: "ACROMATOPSIA (TOTAL)" }
     ];
 
     let index = 0, acertos = 0, erros = [];
-    const braco = document.getElementById('braco'), bola = document.getElementById('bola'), sirene = document.getElementById('sirene');
-
-    let startY = 0;
-    bola.addEventListener('touchstart', (e) => { startY = e.touches[0].clientY; });
-    bola.addEventListener('touchmove', (e) => {
-        let deltaY = e.touches[0].clientY - startY;
-        if (deltaY > 0 && deltaY < 150) braco.style.transform = `rotateX(${deltaY}deg)`;
-        if (deltaY > 130) iniciar();
-    });
-
-    function iniciar() {
-        braco.style.transform = 'rotateX(160deg)';
-        setTimeout(() => { document.getElementById('tela-inicial').classList.add('hidden'); document.getElementById('tela-teste').classList.remove('hidden'); render(); }, 200);
-    }
 
     function render() {
-        sirene.style.background = '#444';
-        sirene.style.boxShadow = 'none';
-        document.getElementById('feedback-area').classList.add('hidden');
-        document.getElementById('game-controls').classList.remove('hidden');
-        document.getElementById('img-target').src = clips[index].url;
-        document.getElementById('label').innerText = `IMAGEM #${index + 1}`;
-        document.getElementById('user-input').value = '';
+        document.getElementById('sirene').style.background = '#444';
+        document.getElementById('sirene').style.boxShadow = 'none';
+        document.getElementById('resultado').style.display = 'none';
+        document.getElementById('controle').style.display = 'block';
+        document.getElementById('titulo').innerText = "Imagem #" + (index + 1);
+        document.getElementById('imagem').src = clips[index].url;
+        document.getElementById('resposta').value = '';
     }
 
-    function validar() {
-        const valDigitado = document.getElementById('user-input').value;
-        const valCerto = clips[index].res.toString();
-        const status = document.getElementById('msg-status');
-        const defText = document.getElementById('msg-deficiencia');
+    function verificar() {
+        const userVal = document.getElementById('resposta').value;
+        const correctVal = clips[index].res.toString();
+        const status = document.getElementById('status-texto');
+        const diag = document.getElementById('diagnostico');
+        const siren = document.getElementById('sirene');
 
-        document.getElementById('game-controls').classList.add('hidden');
-        document.getElementById('feedback-area').classList.remove('hidden');
+        document.getElementById('controle').style.display = 'none';
+        document.getElementById('resultado').style.display = 'block';
 
-        if (valDigitado === valCerto) {
+        if (userVal === correctVal) {
             acertos++;
-            sirene.style.background = '#00ff00';
-            sirene.style.boxShadow = '0 0 20px #00ff00';
+            siren.style.background = '#28a745';
+            siren.style.boxShadow = '0 0 15px #28a745';
             status.innerText = "✅ VOCÊ ACERTOU!";
             status.style.color = "green";
-            defText.innerText = "";
+            diag.innerText = "";
         } else {
-            erros.push({id: index+1, causa: clips[index].def});
-            sirene.style.background = '#ff0000';
-            sirene.style.boxShadow = '0 0 20px #ff0000';
+            erros.push({id: index + 1, causa: clips[index].def});
+            siren.style.background = '#d40000';
+            siren.style.boxShadow = '0 0 15px #d40000';
             status.innerText = "❌ ERRO DETECTADO!";
             status.style.color = "red";
-            defText.innerText = "DIAGNÓSTICO: " + clips[index].def;
+            diag.innerText = "DIAGNÓSTICO: " + clips[index].def;
         }
     }
 
@@ -127,14 +100,17 @@
         document.getElementById('tela-teste').classList.add('hidden');
         document.getElementById('tela-final').classList.remove('hidden');
         const rel = document.getElementById('relatorio');
-        rel.innerHTML = `<p><b>Acertos: ${acertos}/${clips.length}</b></p>`;
+        let html = "<b>Acertos: " + acertos + "/" + clips.length + "</b><br><br>";
         if (erros.length > 0) {
-            rel.innerHTML += `<p style="color:red"><b>Diagnósticos:</b></p>`;
-            erros.forEach(e => rel.innerHTML += `<p>• Imagem ${e.id}: ${e.causa}</p>`);
+            html += "<b>Diagnósticos por imagem:</b><br>";
+            erros.forEach(e => html += "• Imagem " + e.id + ": " + e.causa + "<br>");
         } else {
-            rel.innerHTML += `<p style="color:green">Visão Normal Detectada!</p>`;
+            html += "<span style='color:green'>Sua visão parece normal para cores!</span>";
         }
+        rel.innerHTML = html;
     }
+
+    render();
 </script>
 </body>
 </html>
